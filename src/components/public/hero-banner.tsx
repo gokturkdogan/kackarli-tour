@@ -71,7 +71,7 @@ export function HeroBanner() {
                 href="/iletisim"
                 className={cn(
                   buttonVariants({ size: "lg", variant: "outline" }),
-                  "w-full sm:w-auto justify-center border-cream/30 text-cream hover:bg-cream/10 backdrop-blur-sm"
+                  "w-full sm:w-auto justify-center border-cream/50 text-cream bg-white/10 hover:bg-white/20 hover:text-cream backdrop-blur-sm"
                 )}
               >
                 <Phone className="mr-2 h-4 w-4" />
