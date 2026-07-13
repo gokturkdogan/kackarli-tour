@@ -1,3 +1,4 @@
+import { PageContainer } from "@/components/public/page-container";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, MapPin, Route } from "lucide-react";
@@ -9,8 +10,8 @@ import { cn } from "@/lib/utils";
 
 export function RoutePreviews() {
   return (
-    <section className="py-24 bg-mist">
-      <div className="container mx-auto px-4">
+    <section className="py-24 bg-mist w-full overflow-hidden">
+      <PageContainer>
         <AnimateIn className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <div className="max-w-xl">
             <span className="text-forest-500 text-sm font-medium tracking-widest uppercase">
@@ -41,14 +42,14 @@ export function RoutePreviews() {
             <AnimateIn key={route.id} delay={i * 120}>
               <Link
                 href={route.href}
-                className="group block rounded-2xl overflow-hidden bg-white border border-forest-100 hover:border-forest-300 hover:shadow-2xl hover:shadow-forest-100/60 transition-all duration-500"
+                className="group block rounded-2xl overflow-hidden bg-white border border-forest-100 hover:border-forest-300 hover:shadow-2xl hover:shadow-forest-100/60 transition-all duration-500 w-full"
               >
                 <div className="relative h-56 overflow-hidden">
                   <Image
                     src={route.image}
                     alt={route.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-forest-900/80 via-forest-900/20 to-transparent" />
@@ -111,7 +112,7 @@ export function RoutePreviews() {
             </AnimateIn>
           ))}
         </div>
-      </div>
+      </PageContainer>
     </section>
   );
 }

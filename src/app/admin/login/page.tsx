@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-forest-900 via-forest-800 to-forest-700 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-forest-900 via-forest-800 to-forest-700 p-4 w-full overflow-x-hidden">
       <Toaster richColors position="top-right" />
       <Card className="w-full max-w-md border-forest-200/20 shadow-2xl">
         <CardHeader className="text-center space-y-4">

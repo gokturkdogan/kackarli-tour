@@ -1,3 +1,4 @@
+import { PageContainer } from "@/components/public/page-container";
 import { Cloud, Droplets, Leaf, Mountain } from "lucide-react";
 import { rizeHighlights } from "@/lib/home-data";
 import { AnimateIn } from "@/components/public/animate-in";
@@ -11,11 +12,11 @@ const iconMap = {
 
 export function RizeHighlights() {
   return (
-    <section className="py-24 bg-cream relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-96 h-96 bg-forest-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-sage-100/50 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+    <section className="py-24 bg-cream relative overflow-hidden w-full">
+      <div className="absolute top-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-forest-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 sm:translate-x-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-40 sm:w-72 h-40 sm:h-72 bg-sage-100/50 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 sm:-translate-x-1/2 pointer-events-none" />
 
-      <div className="container mx-auto px-4 relative">
+      <PageContainer className="relative">
         <AnimateIn className="text-center mb-16 max-w-2xl mx-auto">
           <span className="text-forest-500 text-sm font-medium tracking-widest uppercase">
             Neden Rize?
@@ -49,7 +50,7 @@ export function RizeHighlights() {
             );
           })}
         </div>
-      </div>
+      </PageContainer>
     </section>
   );
 }

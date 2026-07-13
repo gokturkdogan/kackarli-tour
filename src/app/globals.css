@@ -118,17 +118,17 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
-    @apply font-sans scroll-smooth;
+    @apply font-sans scroll-smooth overflow-x-hidden;
+  }
+  body {
+    @apply bg-background text-foreground overflow-x-hidden min-w-0;
   }
 }
 
 @keyframes hero-zoom {
-  from { transform: scale(1.05); }
-  to { transform: scale(1.12); }
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
 }
 
 @keyframes mist-1 {
@@ -156,6 +156,11 @@
   50% { transform: translateX(-50%) translateY(8px); }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
 .animate-hero-zoom {
   animation: hero-zoom 20s ease-in-out infinite alternate;
 }
@@ -180,13 +185,18 @@
   animation: bounce-slow 2.5s ease-in-out infinite;
 }
 
+.animate-float {
+  animation: float 2.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-hero-zoom,
   .animate-mist-1,
   .animate-mist-2,
   .animate-mist-3,
   .animate-marquee,
-  .animate-bounce-slow {
+  .animate-bounce-slow,
+  .animate-float {
     animation: none;
   }
 }

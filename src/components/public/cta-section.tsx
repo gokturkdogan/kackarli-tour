@@ -1,3 +1,4 @@
+import { PageContainer } from "@/components/public/page-container";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
@@ -7,7 +8,7 @@ import { AnimateIn } from "@/components/public/animate-in";
 
 export function CtaSection() {
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section className="relative py-20 sm:py-32 overflow-hidden w-full max-w-full">
       <div className="absolute inset-0">
         <Image
           src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80"
@@ -19,7 +20,7 @@ export function CtaSection() {
         <div className="absolute inset-0 bg-forest-900/75" />
       </div>
 
-      <div className="relative container mx-auto px-4 text-center">
+      <PageContainer className="relative text-center">
         <AnimateIn>
           <h2 className="text-3xl md:text-5xl font-bold text-cream mb-4 max-w-2xl mx-auto leading-tight">
             Yaylalar Sizi Bekliyor
@@ -28,12 +29,12 @@ export function CtaSection() {
             Hayalinizdeki Rize turunu planlayalım. WhatsApp üzerinden hızlıca
             bilgi alın veya online rezervasyon talebi oluşturun.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
             <Link
               href="/rezervasyon"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "bg-sage-500 hover:bg-sage-400 text-forest-900 shadow-lg"
+                "w-full sm:w-auto justify-center bg-sage-500 hover:bg-sage-400 text-forest-900 shadow-lg"
               )}
             >
               Rezervasyon Yap
@@ -43,7 +44,7 @@ export function CtaSection() {
               href="/iletisim"
               className={cn(
                 buttonVariants({ size: "lg", variant: "outline" }),
-                "border-cream/30 text-cream hover:bg-cream/10"
+                "w-full sm:w-auto justify-center border-cream/30 text-cream hover:bg-cream/10"
               )}
             >
               <MessageCircle className="mr-2 h-4 w-4" />
@@ -51,7 +52,7 @@ export function CtaSection() {
             </Link>
           </div>
         </AnimateIn>
-      </div>
+      </PageContainer>
     </section>
   );
 }

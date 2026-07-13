@@ -1,10 +1,11 @@
+import { PageContainer } from "@/components/public/page-container";
 import Link from "next/link";
 import { Mountain, Phone, Mail, MapPin } from "lucide-react";
 
 export function PublicFooter() {
   return (
-    <footer className="bg-forest-900 text-cream/70">
-      <div className="container mx-auto px-4 py-16">
+    <footer className="bg-forest-900 text-cream/70 w-full overflow-hidden">
+      <PageContainer className="py-12 sm:py-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-4">
@@ -95,7 +96,7 @@ export function PublicFooter() {
           <p>&copy; {new Date().getFullYear()} Kaçkarlı Tur. Tüm hakları saklıdır.</p>
           <p>Karadeniz&apos;in kalbinde, yaylaların büyüsünde.</p>
         </div>
-      </div>
+      </PageContainer>
     </footer>
   );
 }

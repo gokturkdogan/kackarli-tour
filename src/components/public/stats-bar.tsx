@@ -1,11 +1,12 @@
+import { PageContainer } from "@/components/public/page-container";
 import { stats } from "@/lib/home-data";
 import { AnimateIn } from "@/components/public/animate-in";
 
 export function StatsBar() {
   return (
-    <section className="py-16 bg-forest-800 relative overflow-hidden">
+    <section className="py-16 bg-forest-800 relative overflow-hidden w-full">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-forest-700/50 to-transparent" />
-      <div className="container mx-auto px-4 relative">
+      <PageContainer className="relative">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat, i) => (
             <AnimateIn key={stat.label} delay={i * 80} className="text-center">
@@ -18,7 +19,7 @@ export function StatsBar() {
             </AnimateIn>
           ))}
         </div>
-      </div>
+      </PageContainer>
     </section>
   );
 }

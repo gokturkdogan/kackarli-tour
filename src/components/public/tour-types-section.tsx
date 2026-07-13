@@ -1,3 +1,4 @@
+import { PageContainer } from "@/components/public/page-container";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BedDouble, Sun } from "lucide-react";
@@ -5,8 +6,8 @@ import { AnimateIn } from "@/components/public/animate-in";
 
 export function TourTypesSection() {
   return (
-    <section className="py-24 bg-forest-900 relative overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section className="py-24 bg-forest-900 relative overflow-hidden w-full">
+      <PageContainer>
         <div className="grid lg:grid-cols-2 gap-6">
           <AnimateIn direction="left">
             <Link
@@ -72,7 +73,7 @@ export function TourTypesSection() {
             </Link>
           </AnimateIn>
         </div>
-      </div>
+      </PageContainer>
     </section>
   );
 }

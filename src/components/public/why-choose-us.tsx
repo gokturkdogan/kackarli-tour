@@ -1,11 +1,12 @@
+import { PageContainer } from "@/components/public/page-container";
 import { CheckCircle2 } from "lucide-react";
 import { whyChooseUs } from "@/lib/home-data";
 import { AnimateIn } from "@/components/public/animate-in";
 
 export function WhyChooseUs() {
   return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-4">
+    <section className="py-24 bg-white w-full overflow-hidden">
+      <PageContainer>
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <AnimateIn direction="left">
             <span className="text-forest-500 text-sm font-medium tracking-widest uppercase">
@@ -48,7 +49,7 @@ export function WhyChooseUs() {
             ))}
           </div>
         </div>
-      </div>
+      </PageContainer>
     </section>
   );
 }

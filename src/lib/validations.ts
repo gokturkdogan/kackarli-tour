@@ -53,3 +53,13 @@ export const loginSchema = z.object({
 });
 
 export type LoginFormData = z.infer<typeof loginSchema>;
+
+export const contactSchema = z.object({
+  name: z.string().min(2, "Ad en az 2 karakter olmalıdır"),
+  email: z.string().email("Geçerli bir e-posta adresi giriniz"),
+  phone: z.string().optional(),
+  subject: z.string().optional(),
+  message: z.string().min(10, "Mesaj en az 10 karakter olmalıdır"),
+});
+
+export type ContactFormData = z.infer<typeof contactSchema>;

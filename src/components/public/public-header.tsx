@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, Mountain, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { pageContainerClass } from "@/components/public/page-container";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
@@ -33,14 +34,14 @@ export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 w-full max-w-full transition-all duration-300",
         isTransparent
           ? "bg-forest-900/40 backdrop-blur-md border-b border-cream/10"
           : "bg-cream/95 backdrop-blur-md border-b border-forest-100 shadow-sm"
       )}
     >
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
+      <div className={pageContainerClass("h-16 flex items-center justify-between gap-2 min-w-0")}>
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0 shrink">
           <div
             className={cn(
               "flex h-9 w-9 items-center justify-center rounded-lg transition-transform group-hover:scale-105",
@@ -49,10 +50,10 @@ export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
           >
             <Mountain className="h-4 w-4 text-cream" />
           </div>
-          <div>
+          <div className="min-w-0">
             <span
               className={cn(
-                "text-lg font-semibold leading-none",
+                "text-base sm:text-lg font-semibold leading-none truncate block",
                 isTransparent ? "text-cream" : "text-forest-900"
               )}
             >
@@ -60,7 +61,7 @@ export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
             </span>
             <span
               className={cn(
-                "text-[10px] tracking-widest uppercase block",
+                "text-[10px] tracking-widest uppercase hidden sm:block truncate",
                 isTransparent ? "text-cream/60" : "text-forest-500"
               )}
             >
@@ -110,7 +111,7 @@ export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </SheetTrigger>
-            <SheetContent side="right" className="bg-cream border-forest-100 w-80">
+            <SheetContent side="right" className="bg-cream border-forest-100 w-[min(20rem,100vw)] max-w-full">
               <SheetHeader>
                 <SheetTitle className="text-forest-900">Menü</SheetTitle>
               </SheetHeader>

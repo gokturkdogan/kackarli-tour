@@ -41,10 +41,10 @@ export function AnimateIn({
     <div
       ref={ref}
       className={cn(
-        "transition-all duration-700 ease-out",
+        "transition-all duration-700 ease-out min-w-0",
         !visible && direction === "up" && "translate-y-8 opacity-0",
-        !visible && direction === "left" && "-translate-x-8 opacity-0",
-        !visible && direction === "right" && "translate-x-8 opacity-0",
+        !visible && direction === "left" && "opacity-0 sm:-translate-x-8 sm:translate-y-0 translate-y-6",
+        !visible && direction === "right" && "opacity-0 sm:translate-x-8 sm:translate-y-0 translate-y-6",
         !visible && direction === "none" && "opacity-0",
         visible && "translate-x-0 translate-y-0 opacity-100",
         className

@@ -1,10 +1,11 @@
+import { PageContainer } from "@/components/public/page-container";
 import Image from "next/image";
 import { AnimateIn } from "@/components/public/animate-in";
 
 export function ExperienceBanner() {
   return (
-    <section className="py-0">
-      <div className="container mx-auto px-4 py-16">
+    <section className="py-0 w-full overflow-hidden">
+      <PageContainer className="py-12 sm:py-16">
         <AnimateIn>
           <div className="relative rounded-3xl overflow-hidden">
             <div className="grid lg:grid-cols-2">
@@ -38,7 +39,7 @@ export function ExperienceBanner() {
             </div>
           </div>
         </AnimateIn>
-      </div>
+      </PageContainer>
     </section>
   );
 }

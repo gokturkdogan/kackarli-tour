@@ -1,3 +1,4 @@
+import { PageContainer } from "@/components/public/page-container";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
@@ -34,8 +35,8 @@ export function FeaturedTours({ tours }: FeaturedToursProps) {
   if (tours.length === 0) return null;
 
   return (
-    <section className="py-24 bg-cream">
-      <div className="container mx-auto px-4">
+    <section className="py-24 bg-cream w-full overflow-hidden">
+      <PageContainer>
         <AnimateIn className="text-center mb-12 max-w-2xl mx-auto">
           <span className="text-forest-500 text-sm font-medium tracking-widest uppercase">
             Güncel Turlar
@@ -116,7 +117,7 @@ export function FeaturedTours({ tours }: FeaturedToursProps) {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </AnimateIn>
-      </div>
+      </PageContainer>
     </section>
   );
 }

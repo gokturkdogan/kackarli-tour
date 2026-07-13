@@ -20,7 +20,7 @@ export default async function HomePage() {
   return (
     <>
       <PublicHeader variant="transparent" />
-      <main>
+      <main className="overflow-x-hidden w-full max-w-full">
         <HeroBanner />
         <DestinationMarquee />
         <StatsBar />
