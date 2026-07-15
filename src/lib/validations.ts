@@ -121,3 +121,18 @@ export const reservationSchema = z.object({
 });
 
 export type ReservationFormData = z.infer<typeof reservationSchema>;
+
+export const reservationStatusSchema = z.enum([
+  "PENDING",
+  "CONTACTED",
+  "CONFIRMED",
+  "CANCELLED",
+  "COMPLETED",
+]);
+
+export const reservationStatusUpdateSchema = z.object({
+  id: z.string().min(1),
+  status: reservationStatusSchema,
+});
+
+export type ReservationStatusUpdateData = z.infer<typeof reservationStatusUpdateSchema>;

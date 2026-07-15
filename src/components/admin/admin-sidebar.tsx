@@ -31,7 +31,7 @@ const menuItems = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Turlar", href: "/admin/tours", icon: Map },
   { title: "Tur Tarihleri", href: "/admin/schedules", icon: Calendar },
-  { title: "Rezervasyonlar", href: "/admin/reservations", icon: BookOpen, disabled: true },
+  { title: "Rezervasyonlar", href: "/admin/reservations", icon: BookOpen },
   { title: "Duyurular", href: "/admin/announcements", icon: Megaphone, disabled: true },
   { title: "Galeri", href: "/admin/gallery", icon: Image, disabled: true },
   { title: "Ana Sayfa", href: "/admin/homepage", icon: Home, disabled: true },
