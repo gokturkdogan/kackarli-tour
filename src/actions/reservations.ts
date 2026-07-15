@@ -6,6 +6,10 @@ import { prisma } from "@/lib/prisma";
 import { startOfToday } from "@/lib/date-helpers";
 import { resolveAdultPrice, resolveChildPrice } from "@/lib/pricing";
 import { reservationSchema, type ReservationFormData } from "@/lib/validations";
+import {
+  buildReservationEmailData,
+  sendReservationCreatedEmail,
+} from "@/lib/emails/reservation-email";
 
 export type ReservationActionResult =
   | { success: true; data: { id: string } }
@@ -68,15 +72,40 @@ export async function createReservation(
           totalPrice: new Prisma.Decimal(totalPrice),
           status: "PENDING",
         },
-      });
-
-      await tx.tourSchedule.update({
-        where: { id: scheduleId },
-        data: { reservedCount: { increment: guestCount } },
+        include: {
+          tour: {
+            select: {
+              title: true,
+              subtitle: true,
+              duration: true,
+              departureTime: true,
+              returnTime: true,
+              includedServices: true,
+              itinerary: {
+                orderBy: [{ sortOrder: "asc" }, { dayNumber: "asc" }],
+                select: {
+                  time: true,
+                  title: true,
+                  duration: true,
+                  stopType: true,
+                  sortOrder: true,
+                  dayNumber: true,
+                },
+              },
+            },
+          },
+          schedule: { select: { startDate: true, endDate: true } },
+        },
       });
 
       return reservation;
     });
+
+    try {
+      await sendReservationCreatedEmail(buildReservationEmailData(result));
+    } catch (error) {
+      console.error("[mail] Rezervasyon oluşturma e-postası gönderilemedi:", error);
+    }
 
     revalidatePath("/rezervasyon");
 
