@@ -5,13 +5,14 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AnimateIn } from "@/components/public/animate-in";
+import { stockImage } from "@/lib/stock-images";
 
 export function CtaSection() {
   return (
     <section className="relative py-20 sm:py-32 overflow-hidden w-full max-w-full">
       <div className="absolute inset-0">
         <Image
-          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80"
+          src={stockImage("mountainPeaks", 1920)}
           alt="Kaçkar Dağları panorama"
           fill
           className="object-cover"

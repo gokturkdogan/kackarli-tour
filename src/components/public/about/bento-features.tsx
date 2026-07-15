@@ -6,16 +6,16 @@ import { cn } from "@/lib/utils";
 
 export function BentoFeatures() {
   return (
-    <section className="py-20 bg-cream w-full overflow-hidden">
+    <section className="py-12 sm:py-20 bg-cream w-full overflow-hidden">
       <PageContainer>
-        <AnimateIn className="mb-10 sm:mb-14 max-w-2xl">
-          <span className="text-forest-500 text-sm font-medium tracking-widest uppercase">
+        <AnimateIn className="mb-8 sm:mb-14 max-w-2xl">
+          <span className="inline-flex items-center rounded-full bg-forest-50 px-3 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-forest-600">
             Tur Deneyimi
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-forest-900 mt-3 mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-forest-900 mt-3 mb-3 sm:mb-4">
             Sıradan Bir Tur Değil, Bir Macera
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             Her detayı düşünülmüş tur programlarımızla Rize&apos;yi en iyi şekilde
             deneyimlemenizi sağlıyoruz.
           </p>
@@ -27,8 +27,8 @@ export function BentoFeatures() {
               key={feature.title}
               delay={i * 80}
               className={cn(
-                "rounded-2xl overflow-hidden border border-forest-100 relative group min-h-[160px]",
-                feature.size === "lg" && "sm:col-span-2 sm:row-span-2 min-h-[280px] sm:min-h-0",
+                "rounded-xl sm:rounded-2xl overflow-hidden border border-forest-100 relative group min-h-[180px] shadow-sm sm:shadow-none",
+                feature.size === "lg" && "sm:col-span-2 sm:row-span-2 min-h-[220px] sm:min-h-0",
                 feature.size === "md" && "sm:col-span-2 min-h-[200px] sm:min-h-0",
                 feature.size === "sm" && "sm:col-span-1"
               )}

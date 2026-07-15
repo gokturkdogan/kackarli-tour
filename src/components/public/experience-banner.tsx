@@ -1,6 +1,7 @@
 import { PageContainer } from "@/components/public/page-container";
 import Image from "next/image";
 import { AnimateIn } from "@/components/public/animate-in";
+import { stockImage } from "@/lib/stock-images";
 
 export function ExperienceBanner() {
   return (
@@ -11,7 +12,7 @@ export function ExperienceBanner() {
             <div className="grid lg:grid-cols-2">
               <div className="relative h-64 lg:h-auto min-h-[320px]">
                 <Image
-                  src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=900&q=80"
+                  src={stockImage("lakeReflection", 900)}
                   alt="Rize çay tarlaları ve vadi"
                   fill
                   className="object-cover"

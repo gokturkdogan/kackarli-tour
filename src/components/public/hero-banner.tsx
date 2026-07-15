@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AnimateIn } from "@/components/public/animate-in";
 import { PageContainer } from "@/components/public/page-container";
+import { stockImage } from "@/lib/stock-images";
 
 export function HeroBanner() {
   return (
@@ -12,7 +13,7 @@ export function HeroBanner() {
       {/* Background image */}
       <div className="absolute inset-0 overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=85"
+          src={stockImage("heroMountain", 1920, 85)}
           alt="Rize Kaçkar Dağları yayla manzarası"
           fill
           priority

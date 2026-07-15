@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { parseMultilineList } from "@/lib/tour-mapper";
 import { resolveAdultPrice, resolveChildPrice } from "@/lib/pricing";
+import { resolveStockImageUrl } from "@/lib/stock-images";
 import { mapTourToPublic } from "@/lib/tour-mapper";
 import { startOfToday } from "@/lib/date-helpers";
 import type { PublicTour, PublicTourReservationOption } from "@/lib/tour-types";
@@ -75,7 +76,7 @@ export async function getToursForReservation(): Promise<PublicTourReservationOpt
       subtitle: tour.subtitle ?? undefined,
       type: tour.type,
       duration: tour.duration ?? undefined,
-      image: tour.coverImageUrl ?? undefined,
+      image: resolveStockImageUrl(tour.coverImageUrl, 1200),
       boardingPoints: parseMultilineList(tour.boardingPoints),
       defaultAdultPrice: Number(tour.price),
       defaultChildPrice: resolveChildPrice(null, tour.childPrice, Number(tour.price)),

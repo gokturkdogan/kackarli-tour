@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { stockImage } from "@/lib/stock-images";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PageHero } from "@/components/public/page-hero";
@@ -23,7 +24,7 @@ export default async function ReservationPage({ searchParams }: ReservationPageP
   const heroImage =
     tours.find((t) => t.slug === tur)?.image ??
     tours[0]?.image ??
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80";
+    stockImage("heroMountain", 1920);
 
   return (
     <>

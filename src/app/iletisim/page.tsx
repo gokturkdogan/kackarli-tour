@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { stockImage } from "@/lib/stock-images";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PageHero } from "@/components/public/page-hero";
@@ -24,7 +25,7 @@ export default async function ContactPage() {
           title="İletişim"
           subtitle={settings.siteName}
           description="Tur planlaması ve rezervasyon için bize ulaşın. WhatsApp üzerinden anında yanıt alın."
-          image="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920&q=80"
+          image={stockImage("lakeReflection", 1920)}
         />
         <ContactHub settings={settings} />
       </main>

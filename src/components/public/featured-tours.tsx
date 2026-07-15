@@ -25,11 +25,7 @@ interface FeaturedToursProps {
   tours: Tour[];
 }
 
-const fallbackImages = [
-  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
-  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
-  "https://images.unsplash.com/photo-1454496526348-df8e440a6e24?w=800&q=80",
-];
+import { resolveStockImageUrl, tourCardFallbacks } from "@/lib/stock-images";
 
 export function FeaturedTours({ tours }: FeaturedToursProps) {
   if (tours.length === 0) return null;
@@ -58,7 +54,10 @@ export function FeaturedTours({ tours }: FeaturedToursProps) {
               >
                 <div className="relative h-48 overflow-hidden">
                   <Image
-                    src={tour.coverImageUrl || fallbackImages[i % fallbackImages.length]}
+                    src={
+                      resolveStockImageUrl(tour.coverImageUrl, 800) ||
+                      tourCardFallbacks[i % tourCardFallbacks.length]
+                    }
                     alt={tour.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"

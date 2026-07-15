@@ -1,5 +1,6 @@
 import type { ItineraryStopType, Tour, TourItineraryItem, TourType } from "@/generated/prisma/client";
 import type { PublicRouteStop, PublicTour, RouteStopType } from "@/lib/tour-types";
+import { resolveStockImageUrl } from "@/lib/stock-images";
 
 export function parseMultilineList(value?: string | null): string[] {
   if (!value) return [];
@@ -44,7 +45,7 @@ export function mapTourToPublic(tour: TourWithItinerary): PublicTour {
       type: mapItineraryStopType(item.stopType),
       description: item.description,
       duration: item.duration ?? undefined,
-      image: item.imageUrl ?? undefined,
+      image: resolveStockImageUrl(item.imageUrl),
       featured: item.isFeatured,
     }));
 
@@ -63,7 +64,7 @@ export function mapTourToPublic(tour: TourWithItinerary): PublicTour {
     maxGroupSize: tour.maxGroupSize ?? undefined,
     price: Number(tour.price),
     childPrice: tour.childPrice ? Number(tour.childPrice) : undefined,
-    image: tour.coverImageUrl ?? undefined,
+    image: resolveStockImageUrl(tour.coverImageUrl, 1200),
     highlights: parseMultilineList(tour.highlights),
     included: parseMultilineList(tour.includedServices),
     excluded: parseMultilineList(tour.excludedServices),

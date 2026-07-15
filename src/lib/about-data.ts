@@ -1,3 +1,5 @@
+import { stockImage } from "@/lib/stock-images";
+
 export const milestones = [
   {
     year: "2014",
@@ -95,7 +97,7 @@ export const bentoFeatures = [
     stat: null,
     statLabel: null,
     size: "lg",
-    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80",
+    image: stockImage("localFood", 800),
   },
   {
     title: "Profesyonel Rehberlik",
@@ -111,7 +113,7 @@ export const bentoFeatures = [
     stat: null,
     statLabel: null,
     size: "md",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+    image: stockImage("mountainPeaks", 800),
   },
   {
     title: "Esnek Program",

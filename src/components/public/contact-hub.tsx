@@ -14,6 +14,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getWhatsAppUrl, type SiteSettings } from "@/lib/site-settings";
 import { AnimateIn } from "@/components/public/animate-in";
+import { stockImage } from "@/lib/stock-images";
 
 interface ContactHubProps {
   settings: SiteSettings;
@@ -82,7 +83,7 @@ export function ContactHub({ settings }: ContactHubProps) {
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-forest-800 via-forest-900 to-forest-950 shadow-2xl shadow-forest-900/25">
               <div className="absolute inset-0 opacity-20">
                 <Image
-                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80"
+                  src={stockImage("heroMountain", 900)}
                   alt=""
                   fill
                   className="object-cover"

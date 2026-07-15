@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { stockImage } from "@/lib/stock-images";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PageHero } from "@/components/public/page-hero";
@@ -30,7 +31,7 @@ export default async function AboutPage() {
           title="Hakkımızda"
           subtitle={settings.siteName}
           description="Rize'nin yaylalarını tutkuyla keşfetmeniz için buradayız. Hikayemizi, değerlerimizi ve ekibimizi tanıyın."
-          image="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80"
+          image={stockImage("mountainPeaks", 1920)}
         />
         <AboutStory settings={settings} />
         <RegionFacts />

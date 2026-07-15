@@ -2,6 +2,7 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import { PrismaClient } from "../src/generated/prisma/client";
+import { stockImage } from "../src/lib/stock-images";
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
@@ -15,7 +16,7 @@ const itineraryStops = [
     description:
       "Belirlenen biniş noktalarından misafirlerimizi alıyor, günlük rotamıza başlıyoruz. Rehberimiz günün programını kısaca tanıtır.",
     duration: "15 dk",
-    imageUrl: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80",
+    imageUrl: stockImage("lakeReflection", 800),
     isFeatured: false,
     sortOrder: 1,
   },
@@ -26,7 +27,7 @@ const itineraryStops = [
     description:
       "Karadeniz'in en etkileyici vadilerinden biri olan Fırtına Vadisi'nde kısa bir fotoğraf molası. Coşkulu dere ve yeşil yamaçlar eşliğinde manzara keyfi.",
     duration: "20 dk",
-    imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
+    imageUrl: stockImage("mistyValley", 800),
     isFeatured: true,
     sortOrder: 2,
   },
@@ -37,7 +38,7 @@ const itineraryStops = [
     description:
       "Fırtına Deresi üzerindeki tarihi Zil Kalesi manzara noktasında durak. Vadi ve kale silüetini bir arada görebileceğiniz özel bir fotoğraf durağı.",
     duration: "25 dk",
-    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+    imageUrl: stockImage("mountainPeaks", 800),
     isFeatured: false,
     sortOrder: 3,
   },
@@ -48,7 +49,7 @@ const itineraryStops = [
     description:
       "Karadeniz'in en ünlü yaylalarından Ayder'de serbest zaman. Gelintulu Şelalesi çevresi, köprüler ve yayla atmosferini keşfedin.",
     duration: "1,5 saat",
-    imageUrl: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&q=80",
+    imageUrl: stockImage("alpineLake", 800),
     isFeatured: true,
     sortOrder: 4,
   },
@@ -59,7 +60,7 @@ const itineraryStops = [
     description:
       "Yayla restoranında öğle yemeği molası. Muhlama, hamsi veya bölgeye özgü menülerle Karadeniz mutfağını tadın. (Yemek tur ücretine dahil değildir.)",
     duration: "1 saat",
-    imageUrl: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80",
+    imageUrl: stockImage("localFood", 800),
     isFeatured: false,
     sortOrder: 5,
   },
@@ -70,7 +71,7 @@ const itineraryStops = [
     description:
       "Sis denizinin üzerinde yükselen çayırlık yayla. Ahşap evler, panoramik Kaçkar manzarası ve bulutların arasından süzülen ışık — rotanın en etkileyici durağı.",
     duration: "45 dk",
-    imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    imageUrl: stockImage("heroMountain", 800),
     isFeatured: true,
     sortOrder: 6,
   },
@@ -81,7 +82,7 @@ const itineraryStops = [
     description:
       "Pokut'un komşu yaylası Sal'da çay molası ve kısa yürüyüş. Yayla havasını soluyup dinlenme imkânı.",
     duration: "30 dk",
-    imageUrl: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80",
+    imageUrl: stockImage("starryMountains", 800),
     isFeatured: false,
     sortOrder: 7,
   },
@@ -92,7 +93,7 @@ const itineraryStops = [
     description:
       "Gün boyunca biriktirdiğimiz anılarla Rize merkeze doğru dönüş. Yol üzerinde ek molalar hava ve grup temposuna göre düzenlenir.",
     duration: "—",
-    imageUrl: "https://images.unsplash.com/photo-1454496526348-df8e440a6e24?w=800&q=80",
+    imageUrl: stockImage("forestPath", 800),
     isFeatured: false,
     sortOrder: 8,
   },
@@ -103,7 +104,7 @@ const itineraryStops = [
     description:
       "Biniş noktalarına güvenli şekilde ulaştırıyoruz. Günübirlik yayla turumuzun sonu — bir sonraki macerada görüşmek üzere!",
     duration: "—",
-    imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    imageUrl: stockImage("heroMountain", 800),
     isFeatured: false,
     sortOrder: 9,
   },
@@ -128,8 +129,7 @@ async function main() {
       maxGroupSize: 15,
       highlights:
         "Fırtına Vadisi\nAyder Yaylası\nPokut & Sal\nZil Kalesi\nYerel lezzet molası",
-      coverImageUrl:
-        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+      coverImageUrl: stockImage("heroMountain", 1200),
       boardingPoints: "Rize Otogar önü\nÇayeli merkez\nArdeşen merkez (talep üzerine)",
       includedServices:
         "Klimalı tur aracı transferi\nProfesyonel yerel rehberlik\nRota boyunca planlı molalar\nSigorta ve güvenlik desteği",
@@ -153,8 +153,7 @@ async function main() {
       maxGroupSize: 15,
       highlights:
         "Fırtına Vadisi\nAyder Yaylası\nPokut & Sal\nZil Kalesi\nYerel lezzet molası",
-      coverImageUrl:
-        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+      coverImageUrl: stockImage("heroMountain", 1200),
       boardingPoints: "Rize Otogar önü\nÇayeli merkez\nArdeşen merkez (talep üzerine)",
       includedServices:
         "Klimalı tur aracı transferi\nProfesyonel yerel rehberlik\nRota boyunca planlı molalar\nSigorta ve güvenlik desteği",
@@ -177,26 +176,30 @@ async function main() {
 
   console.log("Tour created:", tour.title);
 
-  // Upcoming sample schedules
-  await prisma.tourSchedule.deleteMany({ where: { tourId: tour.id } });
+  const existingSchedules = await prisma.tourSchedule.count({
+    where: { tourId: tour.id },
+  });
 
-  const today = new Date();
-  today.setHours(12, 0, 0, 0);
-  for (const days of [7, 14, 21, 28]) {
-    const date = new Date(today);
-    date.setDate(date.getDate() + days);
-    await prisma.tourSchedule.create({
-      data: {
-        tourId: tour.id,
-        startDate: date,
-        capacity: 15,
-        reservedCount: 0,
-        isActive: true,
-      },
-    });
+  if (existingSchedules === 0) {
+    const today = new Date();
+    today.setHours(12, 0, 0, 0);
+    for (const days of [7, 14, 21, 28]) {
+      const date = new Date(today);
+      date.setDate(date.getDate() + days);
+      await prisma.tourSchedule.create({
+        data: {
+          tourId: tour.id,
+          startDate: date,
+          capacity: 15,
+          reservedCount: 0,
+          isActive: true,
+        },
+      });
+    }
+    console.log("Sample tour schedules created");
+  } else {
+    console.log("Schedules kept (existing reservations may reference them)");
   }
-
-  console.log("Sample tour schedules created");
 
   const settings = [
     { key: "site_name", value: "Kaçkarlı Tur" },
