@@ -39,21 +39,21 @@ export function FeaturedTours({ tours }: FeaturedToursProps) {
       <PageContainer>
         <AnimateIn className="text-center mb-12 max-w-2xl mx-auto">
           <span className="text-forest-500 text-sm font-medium tracking-widest uppercase">
-            Güncel Turlar
+            Rezervasyon
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-forest-900 mt-3 mb-3">
-            Yaklaşan Turlarımız
+            Yaklaşan Tur Tarihleri
           </h2>
           <p className="text-muted-foreground">
-            Hemen rezervasyon yapabileceğiniz aktif turlarımıza göz atın.
+            Günübirlik yayla turumuz için müsait tarihlere göz atın ve hemen yerinizi ayırtın.
           </p>
         </AnimateIn>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-1 max-w-lg mx-auto gap-6">
           {tours.map((tour, i) => (
             <AnimateIn key={tour.id} delay={i * 100}>
               <Link
-                href={`/turlar/${tour.slug}`}
+                href={tour.slug ? `/turlar/${tour.slug}` : "/turlar"}
                 className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-forest-100 hover:border-forest-300 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full"
               >
                 <div className="relative h-48 overflow-hidden">
@@ -113,7 +113,7 @@ export function FeaturedTours({ tours }: FeaturedToursProps) {
               "bg-forest-600 hover:bg-forest-700 text-cream"
             )}
           >
-            Tüm Turları Gör
+            Tur Detaylarını Gör
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </AnimateIn>

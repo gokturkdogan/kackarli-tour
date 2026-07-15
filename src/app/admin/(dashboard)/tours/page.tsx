@@ -40,7 +40,6 @@ export default async function ToursPage() {
               <TableRow>
                 <TableHead className="w-16">Görsel</TableHead>
                 <TableHead>Başlık</TableHead>
-                <TableHead>Kategori</TableHead>
                 <TableHead>Tip</TableHead>
                 <TableHead>Fiyat</TableHead>
                 <TableHead>Durum</TableHead>
@@ -50,7 +49,7 @@ export default async function ToursPage() {
             <TableBody>
               {tours.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                     Henüz tur eklenmemiş
                   </TableCell>
                 </TableRow>
@@ -80,7 +79,6 @@ export default async function ToursPage() {
                         <p className="text-xs text-muted-foreground">{tour.slug}</p>
                       </div>
                     </TableCell>
-                    <TableCell>{tour.category.name}</TableCell>
                     <TableCell>
                       <Badge variant="outline">
                         {tourTypeLabel(tour.type)}

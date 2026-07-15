@@ -23,18 +23,11 @@ import { tourSchema, type TourFormData } from "@/lib/validations";
 import { slugify } from "@/lib/utils-helpers";
 import { createTour, updateTour } from "@/actions/tours";
 
-interface Category {
-  id: string;
-  name: string;
-  type: string;
-}
-
 interface TourFormProps {
-  categories: Category[];
   initialData?: TourFormData & { id: string };
 }
 
-export function TourForm({ categories, initialData }: TourFormProps) {
+export function TourForm({ initialData }: TourFormProps) {
   const router = useRouter();
   const isEditing = !!initialData;
 
@@ -50,13 +43,18 @@ export function TourForm({ categories, initialData }: TourFormProps) {
     defaultValues: initialData ?? {
       title: "",
       slug: "",
+      subtitle: "",
       description: "",
       shortDescription: "",
       type: "DAY_TRIP",
-      categoryId: "",
       price: 0,
       childPrice: undefined,
       duration: "",
+      distance: "",
+      departureTime: "",
+      returnTime: "",
+      maxGroupSize: 15,
+      highlights: "",
       coverImageUrl: undefined,
       includedServices: "",
       excludedServices: "",
@@ -73,12 +71,7 @@ export function TourForm({ categories, initialData }: TourFormProps) {
   });
 
   const type = watch("type");
-  const categoryId = watch("categoryId");
   const isActive = watch("isActive");
-
-  const filteredCategories = categories.filter(
-    (c) => c.type === type || !type
-  );
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
@@ -136,6 +129,15 @@ export function TourForm({ categories, initialData }: TourFormProps) {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="subtitle">Alt Başlık / Güzergâh</Label>
+              <Input
+                id="subtitle"
+                {...register("subtitle")}
+                placeholder="Örn: Fırtına Vadisi · Ayder · Pokut"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="shortDescription">Kısa Açıklama</Label>
               <Input
                 id="shortDescription"
@@ -159,12 +161,70 @@ export function TourForm({ categories, initialData }: TourFormProps) {
               )}
             </div>
 
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="duration">Süre</Label>
+                <Input
+                  id="duration"
+                  {...register("duration")}
+                  placeholder="Örn: 1 Gün"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="distance">Mesafe</Label>
+                <Input
+                  id="distance"
+                  {...register("distance")}
+                  placeholder="Örn: ≈ 180 km"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="departureTime">Hareket Saati</Label>
+                <Input
+                  id="departureTime"
+                  {...register("departureTime")}
+                  placeholder="08:00"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="returnTime">Dönüş Saati</Label>
+                <Input
+                  id="returnTime"
+                  {...register("returnTime")}
+                  placeholder="20:00"
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
-              <Label htmlFor="duration">Süre</Label>
+              <Label htmlFor="maxGroupSize">Maksimum Grup</Label>
               <Input
-                id="duration"
-                {...register("duration")}
-                placeholder="Örn: 1 Gün, 2 Gece 3 Gün"
+                id="maxGroupSize"
+                type="number"
+                {...register("maxGroupSize", { valueAsNumber: true })}
+                min={1}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="highlights">Öne Çıkanlar</Label>
+              <Textarea
+                id="highlights"
+                {...register("highlights")}
+                rows={3}
+                placeholder="Her satıra bir öne çıkan nokta yazın"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="coverImageUrl">Kapak Görseli URL</Label>
+              <Input
+                id="coverImageUrl"
+                {...register("coverImageUrl")}
+                placeholder="https://..."
               />
             </div>
           </CardContent>
@@ -173,7 +233,7 @@ export function TourForm({ categories, initialData }: TourFormProps) {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Kategori ve Fiyat</CardTitle>
+              <CardTitle>Tur Tipi ve Fiyat</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -190,30 +250,6 @@ export function TourForm({ categories, initialData }: TourFormProps) {
                     <SelectItem value="ACCOMMODATION">Konaklamalı</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Kategori *</Label>
-                <Select
-                  value={categoryId}
-                  onValueChange={(v) => v && setValue("categoryId", v)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Kategori seçin" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {filteredCategories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.categoryId && (
-                  <p className="text-sm text-destructive">
-                    {errors.categoryId.message}
-                  </p>
-                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -241,6 +277,9 @@ export function TourForm({ categories, initialData }: TourFormProps) {
                     {...register("childPrice", { valueAsNumber: true })}
                     min={0}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Boş bırakırsanız yetişkin fiyatı geçerli olur
+                  </p>
                 </div>
               </div>
 
@@ -304,35 +343,40 @@ export function TourForm({ categories, initialData }: TourFormProps) {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Tur Programı</CardTitle>
+          <CardTitle>Tur Programı — Duraklar</CardTitle>
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={() =>
               append({
-                dayNumber: fields.length + 1,
+                dayNumber: type === "DAY_TRIP" ? 1 : fields.length + 1,
+                stopType: "STOP",
+                time: "",
                 title: "",
                 description: "",
+                duration: "",
+                imageUrl: "",
+                isFeatured: false,
                 sortOrder: fields.length,
               })
             }
           >
             <Plus className="h-4 w-4 mr-1" />
-            Gün Ekle
+            Durak Ekle
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
           {fields.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Henüz program eklenmemiş
+              Henüz durak eklenmemiş
             </p>
           ) : (
             fields.map((field, index) => (
               <div key={field.id} className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-forest-700">
-                    Gün {index + 1}
+                    Durak {index + 1}
                   </span>
                   <Button
                     type="button"
@@ -343,19 +387,53 @@ export function TourForm({ categories, initialData }: TourFormProps) {
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {type === "ACCOMMODATION" && (
+                    <div className="space-y-2">
+                      <Label>Gün No</Label>
+                      <Input
+                        type="number"
+                        {...register(`itinerary.${index}.dayNumber`, { valueAsNumber: true })}
+                        min={1}
+                      />
+                    </div>
+                  )}
                   <div className="space-y-2">
-                    <Label>Gün No</Label>
-                    <Input
-                      type="number"
-                      {...register(`itinerary.${index}.dayNumber`, { valueAsNumber: true })}
-                      min={1}
-                    />
+                    <Label>Saat</Label>
+                    <Input {...register(`itinerary.${index}.time`)} placeholder="09:00" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Başlık</Label>
-                    <Input {...register(`itinerary.${index}.title`)} />
+                    <Label>Durak Tipi</Label>
+                    <Select
+                      value={watch(`itinerary.${index}.stopType`)}
+                      onValueChange={(v) =>
+                        v &&
+                        setValue(
+                          `itinerary.${index}.stopType`,
+                          v as "BOARDING" | "STOP" | "REST" | "VIEWPOINT" | "MEAL"
+                        )
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="BOARDING">Biniş / Varış</SelectItem>
+                        <SelectItem value="STOP">Durak</SelectItem>
+                        <SelectItem value="REST">Dinlenme</SelectItem>
+                        <SelectItem value="VIEWPOINT">Manzara</SelectItem>
+                        <SelectItem value="MEAL">Yemek Molası</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
+                  <div className="space-y-2">
+                    <Label>Süre</Label>
+                    <Input {...register(`itinerary.${index}.duration`)} placeholder="30 dk" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Durak Adı</Label>
+                  <Input {...register(`itinerary.${index}.title`)} />
                 </div>
                 <div className="space-y-2">
                   <Label>Açıklama</Label>
@@ -364,6 +442,24 @@ export function TourForm({ categories, initialData }: TourFormProps) {
                     rows={2}
                   />
                 </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Görsel URL</Label>
+                    <Input {...register(`itinerary.${index}.imageUrl`)} placeholder="https://..." />
+                  </div>
+                  <div className="flex items-center gap-3 pt-6">
+                    <Switch
+                      id={`featured-${index}`}
+                      checked={watch(`itinerary.${index}.isFeatured`)}
+                      onCheckedChange={(v) => setValue(`itinerary.${index}.isFeatured`, v)}
+                    />
+                    <Label htmlFor={`featured-${index}`}>Öne çıkan durak</Label>
+                  </div>
+                </div>
+                <input type="hidden" {...register(`itinerary.${index}.sortOrder`, { valueAsNumber: true })} />
+                {type === "DAY_TRIP" && (
+                  <input type="hidden" {...register(`itinerary.${index}.dayNumber`, { valueAsNumber: true })} />
+                )}
                 <Separator />
               </div>
             ))

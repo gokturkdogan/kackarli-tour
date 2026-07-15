@@ -36,7 +36,7 @@ export function HeroBanner() {
             <div className="inline-flex flex-wrap items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-cream/10 border border-cream/20 backdrop-blur-sm mb-6 lg:mb-8 max-w-full">
               <Star className="h-3.5 w-3.5 text-sage-300 fill-sage-300 shrink-0" />
               <span className="text-cream/90 text-[10px] sm:text-xs font-medium tracking-wide uppercase">
-                Rize · Kaçkar · Yayla Turizmi
+                Yayla Turu Rize
               </span>
             </div>
           </AnimateIn>
@@ -50,8 +50,8 @@ export function HeroBanner() {
 
           <AnimateIn delay={350}>
             <p className="text-lg md:text-xl lg:text-2xl text-cream/75 mb-8 lg:mb-10 max-w-xl lg:max-w-2xl leading-relaxed">
-              Ayder&apos;den Pokut&apos;a, Elevit&apos;ten Kaçkar zirvesine — Karadeniz&apos;in
-              en etkileyici rotalarında profesyonel rehberlikle keşfe çıkın.
+              Fırtına Vadisi&apos;nden Ayder&apos;e, Pokut ve Sal yaylalarına — Rize&apos;nin en
+              güzel güzergâhını tek günde, profesyonel rehberlikle keşfedin.
             </p>
           </AnimateIn>
 
@@ -64,7 +64,7 @@ export function HeroBanner() {
                   "w-full sm:w-auto justify-center bg-sage-500 hover:bg-sage-400 text-forest-900 shadow-lg shadow-sage-500/20 hover:shadow-sage-400/30 transition-all hover:-translate-y-0.5"
                 )}
               >
-                Turları İncele
+                Turu İncele
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link

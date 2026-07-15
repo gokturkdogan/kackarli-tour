@@ -3,7 +3,6 @@ import { AdminHeader } from "@/components/admin/admin-header";
 import { TourForm } from "@/components/admin/tour-form";
 import { TourImageManager } from "@/components/admin/tour-image-manager";
 import { getTourById } from "@/actions/tours";
-import { getActiveCategories } from "@/actions/categories";
 
 interface EditTourPageProps {
   params: Promise<{ id: string }>;
@@ -11,10 +10,7 @@ interface EditTourPageProps {
 
 export default async function EditTourPage({ params }: EditTourPageProps) {
   const { id } = await params;
-  const [tour, categories] = await Promise.all([
-    getTourById(id),
-    getActiveCategories(),
-  ]);
+  const tour = await getTourById(id);
 
   if (!tour) notFound();
 
@@ -22,13 +18,18 @@ export default async function EditTourPage({ params }: EditTourPageProps) {
     id: tour.id,
     title: tour.title,
     slug: tour.slug,
+    subtitle: tour.subtitle ?? "",
     description: tour.description,
     shortDescription: tour.shortDescription ?? "",
     type: tour.type,
-    categoryId: tour.categoryId,
     price: Number(tour.price),
     childPrice: tour.childPrice ? Number(tour.childPrice) : undefined,
     duration: tour.duration ?? "",
+    distance: tour.distance ?? "",
+    departureTime: tour.departureTime ?? "",
+    returnTime: tour.returnTime ?? "",
+    maxGroupSize: tour.maxGroupSize ?? undefined,
+    highlights: tour.highlights ?? "",
     coverImageUrl: tour.coverImageUrl ?? undefined,
     includedServices: tour.includedServices ?? "",
     excludedServices: tour.excludedServices ?? "",
@@ -37,8 +38,13 @@ export default async function EditTourPage({ params }: EditTourPageProps) {
     sortOrder: tour.sortOrder,
     itinerary: tour.itinerary.map((item) => ({
       dayNumber: item.dayNumber,
+      stopType: item.stopType,
+      time: item.time ?? "",
       title: item.title,
       description: item.description,
+      duration: item.duration ?? "",
+      imageUrl: item.imageUrl ?? "",
+      isFeatured: item.isFeatured,
       sortOrder: item.sortOrder,
     })),
   };
@@ -47,7 +53,7 @@ export default async function EditTourPage({ params }: EditTourPageProps) {
     <>
       <AdminHeader title="Tur Düzenle" description={tour.title} />
       <div className="p-6">
-        <TourForm categories={categories} initialData={formData} />
+        <TourForm initialData={formData} />
         <TourImageManager tourId={tour.id} images={tour.images} />
       </div>
     </>

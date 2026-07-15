@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | Kaçkarlı Tur",
   },
   description:
-    "Rize ve Kaçkar Dağları'nda günübirlik ve konaklamalı yayla turları. Doğanın kalbinde unutulmaz deneyimler.",
+    "Rize ve Kaçkar Dağları'nda günübirlik yayla turu. Fırtına Vadisi, Ayder, Pokut ve Sal rotası.",
 };
 
 export default function RootLayout({

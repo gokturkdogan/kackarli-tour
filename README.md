@@ -73,7 +73,6 @@ src/
 - [x] Auth.js admin girişi
 - [x] Cloudinary görsel yükleme
 - [x] Admin panel layout
-- [x] Kategori CRUD
 - [x] Tur CRUD
 - [x] Tur görsel yükleme
 

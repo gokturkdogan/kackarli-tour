@@ -15,29 +15,19 @@ export function PublicFooter() {
               <span className="text-lg font-semibold text-cream">Kaçkarlı Tur</span>
             </Link>
             <p className="text-sm leading-relaxed text-cream/60">
-              Rize ve Kaçkar Dağları&apos;nda günübirlik ve konaklamalı yayla turları.
-              Doğanın kalbinde unutulmaz deneyimler.
+              Rize ve Kaçkar Dağları&apos;nda günübirlik yayla turu. Fırtına Vadisi&apos;nden
+              Pokut ve Sal&apos;a uzanan özel rotamızla doğanın kalbinde unutulmaz bir gün.
             </p>
           </div>
 
           <div>
             <h4 className="text-cream font-semibold mb-4 text-sm uppercase tracking-wider">
-              Turlar
+              Tur
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/turlar" className="hover:text-cream transition-colors">
-                  Tüm Turlar
-                </Link>
-              </li>
-              <li>
-                <Link href="/turlar/gunubirlik" className="hover:text-cream transition-colors">
-                  Günübirlik Turlar
-                </Link>
-              </li>
-              <li>
-                <Link href="/turlar/konaklamali" className="hover:text-cream transition-colors">
-                  Konaklamalı Turlar
+                  Günübirlik Yayla Turu
                 </Link>
               </li>
               <li>

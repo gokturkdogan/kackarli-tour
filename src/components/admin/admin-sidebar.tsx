@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Map,
-  Tags,
   Calendar,
   BookOpen,
   Megaphone,
@@ -31,8 +30,7 @@ import { cn } from "@/lib/utils";
 const menuItems = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Turlar", href: "/admin/tours", icon: Map },
-  { title: "Kategoriler", href: "/admin/categories", icon: Tags },
-  { title: "Tur Tarihleri", href: "/admin/schedules", icon: Calendar, disabled: true },
+  { title: "Tur Tarihleri", href: "/admin/schedules", icon: Calendar },
   { title: "Rezervasyonlar", href: "/admin/reservations", icon: BookOpen, disabled: true },
   { title: "Duyurular", href: "/admin/announcements", icon: Megaphone, disabled: true },
   { title: "Galeri", href: "/admin/gallery", icon: Image, disabled: true },

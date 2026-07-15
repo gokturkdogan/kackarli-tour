@@ -124,6 +124,19 @@
   body {
     @apply bg-background text-foreground overflow-x-hidden min-w-0;
   }
+  button:not(:disabled),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    @apply cursor-pointer;
+  }
+  button:disabled,
+  [type="button"]:disabled,
+  [type="submit"]:disabled,
+  [type="reset"]:disabled {
+    @apply cursor-not-allowed;
+  }
 }
 
 @keyframes hero-zoom {
@@ -189,6 +202,23 @@
   animation: float 2.5s ease-in-out infinite;
 }
 
+#tur-rezervasyon[data-highlight="true"] .booking-card {
+  animation: booking-cta-highlight 0.9s ease-in-out 2;
+}
+
+@keyframes booking-cta-highlight {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 25px 50px -12px rgb(20 46 36 / 0.1);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow:
+      0 25px 50px -12px rgb(20 46 36 / 0.15),
+      0 0 0 4px rgb(134 169 137 / 0.35);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-hero-zoom,
   .animate-mist-1,
@@ -198,5 +228,12 @@
   .animate-bounce-slow,
   .animate-float {
     animation: none;
+  }
+
+  #tur-rezervasyon[data-highlight="true"] .booking-card {
+    animation: none;
+    box-shadow:
+      0 25px 50px -12px rgb(20 46 36 / 0.15),
+      0 0 0 4px rgb(134 169 137 / 0.35);
   }
 }

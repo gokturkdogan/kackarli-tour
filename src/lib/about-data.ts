@@ -6,8 +6,9 @@ export const milestones = [
   },
   {
     year: "2017",
-    title: "Konaklamalı Turlar",
-    description: "Elevit ve Pokut rotalarında yayla konaklama turlarını programımıza ekledik.",
+    title: "Rota Geliştirme",
+    description:
+      "Ayder, Pokut ve Sal duraklarını kapsayan günübirlik yayla rotamızı mükemmelleştirdik.",
   },
   {
     year: "2020",
@@ -68,7 +69,7 @@ export const teamMembers = [
   {
     name: "Can Yıldız",
     role: "Dağ Rehberi",
-    bio: "UIAA sertifikalı rehber. Konaklamalı ve zirve turlarımızın vazgeçilmez ismi.",
+    bio: "UIAA sertifikalı rehber. Günübirlik yayla rotamızın vazgeçilmez ismi, her patikayı bilir.",
     initials: "CY",
   },
   {

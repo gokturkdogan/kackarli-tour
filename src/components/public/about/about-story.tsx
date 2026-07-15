@@ -65,8 +65,8 @@ export function AboutStory({ settings }: AboutStoryProps) {
                 doğaya saygı, güvenlik ve misafirperverlik ilkelerimizden ödün vermiyoruz.
               </p>
               <p>
-                Günübirlik keşiflerden çok günlük konaklamalı maceralara kadar geniş bir
-                yelpazede, Rize&apos;nin her köşesini sizinle paylaşmaya devam ediyoruz.
+                Günübirlik yayla turumuzla Fırtına Vadisi&apos;nden Pokut ve Sal&apos;a uzanan
+                özel rotamızı her hafta onlarca misafirimizle paylaşıyoruz.
               </p>
             </div>
             <Link
@@ -76,7 +76,7 @@ export function AboutStory({ settings }: AboutStoryProps) {
                 "mt-8 bg-forest-600 hover:bg-forest-700 text-cream"
               )}
             >
-              Turlarımızı Keşfedin
+              Tur Rotamızı Keşfedin
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </AnimateIn>

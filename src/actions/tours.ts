@@ -6,13 +6,12 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-auth";
 import { deleteImage } from "@/lib/cloudinary";
 import { tourSchema, type TourFormData } from "@/lib/validations";
-import type { ActionResult } from "@/actions/categories";
+import type { ActionResult } from "@/actions/types";
 
 export async function getTours() {
   return prisma.tour.findMany({
     orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
     include: {
-      category: true,
       _count: { select: { images: true, schedules: true, reservations: true } },
     },
   });
@@ -22,7 +21,6 @@ export async function getTourById(id: string) {
   return prisma.tour.findUnique({
     where: { id },
     include: {
-      category: true,
       images: { orderBy: { sortOrder: "asc" } },
       itinerary: { orderBy: [{ dayNumber: "asc" }, { sortOrder: "asc" }] },
       schedules: { orderBy: { startDate: "asc" } },
@@ -47,7 +45,7 @@ export async function createTour(
       return { success: false, error: "Bu slug zaten kullanılıyor" };
     }
 
-    const { itinerary, childPrice, coverImageUrl, ...tourData } = parsed.data;
+    const { itinerary, childPrice, coverImageUrl, maxGroupSize, ...tourData } = parsed.data;
 
     const tour = await prisma.tour.create({
       data: {
@@ -55,13 +53,28 @@ export async function createTour(
         price: new Prisma.Decimal(tourData.price),
         childPrice: childPrice ? new Prisma.Decimal(childPrice) : null,
         coverImageUrl: coverImageUrl || null,
+        maxGroupSize: maxGroupSize ?? null,
         itinerary: itinerary?.length
-          ? { create: itinerary }
+          ? {
+              create: itinerary.map((item) => ({
+                dayNumber: item.dayNumber,
+                stopType: item.stopType,
+                time: item.time || null,
+                title: item.title,
+                description: item.description,
+                duration: item.duration || null,
+                imageUrl: item.imageUrl || null,
+                isFeatured: item.isFeatured,
+                sortOrder: item.sortOrder,
+              })),
+            }
           : undefined,
       },
     });
 
     revalidatePath("/admin/tours");
+    revalidatePath("/");
+    revalidatePath("/turlar");
     return { success: true, data: { id: tour.id } };
   } catch {
     return { success: false, error: "Tur oluşturulurken bir hata oluştu" };
@@ -86,7 +99,7 @@ export async function updateTour(
       return { success: false, error: "Bu slug zaten kullanılıyor" };
     }
 
-    const { itinerary, childPrice, coverImageUrl, ...tourData } = parsed.data;
+    const { itinerary, childPrice, coverImageUrl, maxGroupSize, ...tourData } = parsed.data;
 
     await prisma.$transaction(async (tx) => {
       await tx.tourItineraryItem.deleteMany({ where: { tourId: id } });
@@ -97,8 +110,21 @@ export async function updateTour(
           price: new Prisma.Decimal(tourData.price),
           childPrice: childPrice ? new Prisma.Decimal(childPrice) : null,
           coverImageUrl: coverImageUrl || null,
+          maxGroupSize: maxGroupSize ?? null,
           itinerary: itinerary?.length
-            ? { create: itinerary }
+            ? {
+                create: itinerary.map((item) => ({
+                  dayNumber: item.dayNumber,
+                  stopType: item.stopType,
+                  time: item.time || null,
+                  title: item.title,
+                  description: item.description,
+                  duration: item.duration || null,
+                  imageUrl: item.imageUrl || null,
+                  isFeatured: item.isFeatured,
+                  sortOrder: item.sortOrder,
+                })),
+              }
             : undefined,
         },
       });
@@ -106,6 +132,9 @@ export async function updateTour(
 
     revalidatePath("/admin/tours");
     revalidatePath(`/admin/tours/${id}/edit`);
+    revalidatePath("/");
+    revalidatePath("/turlar");
+    revalidatePath(`/turlar/${parsed.data.slug}`);
     return { success: true };
   } catch {
     return { success: false, error: "Tur güncellenirken bir hata oluştu" };

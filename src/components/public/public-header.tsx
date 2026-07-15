@@ -15,9 +15,7 @@ import {
 } from "@/components/ui/sheet";
 
 const navLinks = [
-  { href: "/turlar", label: "Turlar" },
-  { href: "/turlar/gunubirlik", label: "Günübirlik" },
-  { href: "/turlar/konaklamali", label: "Konaklamalı" },
+  { href: "/turlar", label: "Tur Rotası" },
   { href: "/galeri", label: "Galeri" },
   { href: "/hakkimizda", label: "Hakkımızda" },
   { href: "/iletisim", label: "İletişim" },
@@ -65,7 +63,7 @@ export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
                 isTransparent ? "text-cream/60" : "text-forest-500"
               )}
             >
-              Rize · Yayla Turları
+              Rize · Günübirlik Tur
             </span>
           </div>
         </Link>
@@ -98,7 +96,7 @@ export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
                 : "bg-forest-600 hover:bg-forest-700 text-cream"
             )}
           >
-            Turları Keşfet
+            Tura Katıl
           </Link>
 
           <Sheet open={open} onOpenChange={setOpen}>
@@ -134,7 +132,7 @@ export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
                     "mt-4 bg-forest-600 hover:bg-forest-700 text-cream"
                   )}
                 >
-                  Turları Keşfet
+                  Tura Katıl
                 </Link>
               </nav>
             </SheetContent>

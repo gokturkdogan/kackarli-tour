@@ -8,6 +8,7 @@ interface AnimateInProps {
   className?: string;
   delay?: number;
   direction?: "up" | "left" | "right" | "none";
+  id?: string;
 }
 
 export function AnimateIn({
@@ -15,6 +16,7 @@ export function AnimateIn({
   className,
   delay = 0,
   direction = "up",
+  id,
 }: AnimateInProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -40,6 +42,7 @@ export function AnimateIn({
   return (
     <div
       ref={ref}
+      id={id}
       className={cn(
         "transition-all duration-700 ease-out min-w-0",
         !visible && direction === "up" && "translate-y-8 opacity-0",
