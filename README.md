@@ -1,6 +1,8 @@
-# Kaçkarlı Tur - Rize Yayla Turizmi MVP
+# Kaçkarlı Tur - Rize Yayla Turizmi
 
-Rize'de yayla turizmi, günübirlik ve konaklamalı turlar düzenleyen firma için web uygulaması.
+Rize'de yayla turizmi, günübirlik ve konaklamalı turlar için public web sitesi.
+
+Yönetim paneli ayrı repoda: **[kackarli-tour-backoffice](../kackarli-tour-backoffice)**
 
 ## Teknoloji
 
@@ -8,86 +10,40 @@ Rize'de yayla turizmi, günübirlik ve konaklamalı turlar düzenleyen firma iç
 - **TypeScript**
 - **Tailwind CSS v4** + **shadcn/ui**
 - **PostgreSQL** + **Prisma ORM**
-- **Auth.js** (NextAuth v5)
-- **Cloudinary** CDN
 - **Zod** doğrulama
 
 ## Kurulum
 
-### 1. Bağımlılıkları yükleyin
-
 ```bash
 npm install
-```
-
-### 2. Ortam değişkenlerini ayarlayın
-
-```bash
 cp .env.example .env
-```
-
-`.env` dosyasını düzenleyin:
-
-- `DATABASE_URL` — PostgreSQL bağlantı dizesi
-- `AUTH_SECRET` — `openssl rand -base64 32` ile oluşturun
-- `CLOUDINARY_*` — Cloudinary hesap bilgileri
-
-### 3. Veritabanını oluşturun
-
-```bash
+# DATABASE_URL değerini doldurun
 npm run db:migrate
 npm run db:seed
-```
-
-### 4. Geliştirme sunucusunu başlatın
-
-```bash
 npm run dev
 ```
 
 - Site: http://localhost:3000
-- Admin: http://localhost:3000/admin
-- Giriş: seed ile oluşturulan admin hesabı (varsayılan: `admin@kackarlitur.com` / `admin123456`)
+- Admin panel: http://localhost:3001/admin (`kackarli-tour-backoffice` repo)
 
 ## Proje Yapısı
 
 ```
 src/
-├── actions/          # Server Actions (CRUD)
-├── app/
-│   ├── admin/        # Admin paneli
-│   ├── api/          # API routes (auth, upload)
-│   └── page.tsx      # Ana sayfa
+├── actions/          # Public server actions
+├── app/              # Public sayfalar
 ├── components/
-│   ├── admin/        # Admin bileşenleri
+│   ├── public/       # Site bileşenleri
 │   └── ui/           # shadcn/ui
-├── lib/              # Yardımcı kütüphaneler
-└── generated/prisma/ # Prisma client
+├── lib/
+└── generated/prisma/
 ```
 
-## İlk Aşama (Tamamlandı)
+## İlgili Repolar
 
-- [x] Next.js proje yapısı
-- [x] Tailwind ve shadcn/ui
-- [x] Prisma ve PostgreSQL modelleri
-- [x] Auth.js admin girişi
-- [x] Cloudinary görsel yükleme
-- [x] Admin panel layout
-- [x] Tur CRUD
-- [x] Tur görsel yükleme
+| Repo | Açıklama |
+|------|----------|
+| `kackarli-tour` | Public site (bu repo) |
+| `kackarli-tour-backoffice` | Admin paneli |
 
-## Sonraki Aşamalar
-
-- [ ] Public tur sayfaları
-- [ ] Rezervasyon sistemi
-- [ ] Tur tarihleri yönetimi
-- [ ] Duyuru sistemi
-- [ ] Galeri yönetimi
-- [ ] Site ayarları
-- [ ] Ana sayfa yönetimi
-
-## Vercel Deploy
-
-1. PostgreSQL veritabanı oluşturun (Vercel Postgres, Neon, Supabase vb.)
-2. Ortam değişkenlerini Vercel'e ekleyin
-3. Deploy edin — `postinstall` script'i Prisma client'ı otomatik üretir
+Her iki proje aynı PostgreSQL veritabanını paylaşır.

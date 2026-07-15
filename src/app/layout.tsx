@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Providers } from "@/components/providers";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
@@ -26,9 +25,7 @@ export default function RootLayout({
   return (
     <html lang="tr" className={`${inter.variable} h-full antialiased overflow-x-hidden`}>
       <body className="min-h-full flex flex-col overflow-x-hidden w-full">
-        <Providers>
-          <TooltipProvider>{children}</TooltipProvider>
-        </Providers>
+        <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
   );
