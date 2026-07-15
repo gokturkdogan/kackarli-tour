@@ -107,6 +107,20 @@ export async function createReservation(
       console.error("[mail] Rezervasyon oluşturma e-postası gönderilemedi:", error);
     }
 
+    try {
+      const { notifyAdminsNewReservation } = await import("@/lib/push/notifications");
+      await notifyAdminsNewReservation({
+        id: result.id,
+        firstName: result.firstName,
+        lastName: result.lastName,
+        adultCount: result.adultCount,
+        childCount: result.childCount,
+        tour: { title: result.tour.title },
+      });
+    } catch (error) {
+      console.error("[push] Admin bildirimi gönderilemedi:", error);
+    }
+
     revalidatePath("/rezervasyon");
 
     return { success: true, data: { id: result.id } };
