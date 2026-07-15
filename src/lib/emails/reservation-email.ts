@@ -29,7 +29,12 @@ export interface ReservationEmailData {
   includedHighlights: string[];
 }
 
-export type ReservationEmailVariant = "created" | "confirmed" | "cancelled";
+export type ReservationEmailVariant =
+  | "created"
+  | "contacted"
+  | "confirmed"
+  | "cancelled"
+  | "completed";
 
 const VARIANT_CONFIG: Record<
   ReservationEmailVariant,
@@ -43,6 +48,15 @@ const VARIANT_CONFIG: Record<
     accent: "#1e3d2f",
     badge: "Beklemede",
     badgeBg: "#d4a574",
+  },
+  contacted: {
+    title: "Rezervasyonunuzla İlgileniyoruz",
+    intro:
+      "rezervasyon talebinizle ilgili ekibimiz sizinle iletişime geçti veya en kısa sürede dönüş yapacaktır.",
+    subject: "Rezervasyonunuzla ilgileniyoruz — Kaçkarlı Tur",
+    accent: "#1e4a6b",
+    badge: "İletişimde",
+    badgeBg: "#a8cce8",
   },
   confirmed: {
     title: "Rezervasyonunuz Onaylandı",
@@ -59,6 +73,14 @@ const VARIANT_CONFIG: Record<
     accent: "#7a2e2e",
     badge: "İptal",
     badgeBg: "#e8a0a0",
+  },
+  completed: {
+    title: "Turunuz Tamamlandı",
+    intro: "bizimle gezindiğiniz için teşekkür ederiz. Bir sonraki macerada görüşmek üzere!",
+    subject: "Teşekkürler — Kaçkarlı Tur",
+    accent: "#2d5a3d",
+    badge: "Tamamlandı",
+    badgeBg: "#b8d4b8",
   },
 };
 
@@ -381,28 +403,33 @@ export function buildReservationEmailData(reservation: {
 }
 
 export async function sendReservationCreatedEmail(data: ReservationEmailData) {
-  const config = VARIANT_CONFIG.created;
-  return sendMail({
-    to: data.email,
-    subject: config.subject,
-    html: renderReservationEmailHtml("created", data),
-  });
+  return sendReservationStatusEmail("created", data);
+}
+
+export async function sendReservationContactedEmail(data: ReservationEmailData) {
+  return sendReservationStatusEmail("contacted", data);
 }
 
 export async function sendReservationConfirmedEmail(data: ReservationEmailData) {
-  const config = VARIANT_CONFIG.confirmed;
-  return sendMail({
-    to: data.email,
-    subject: config.subject,
-    html: renderReservationEmailHtml("confirmed", data),
-  });
+  return sendReservationStatusEmail("confirmed", data);
 }
 
 export async function sendReservationCancelledEmail(data: ReservationEmailData) {
-  const config = VARIANT_CONFIG.cancelled;
+  return sendReservationStatusEmail("cancelled", data);
+}
+
+export async function sendReservationCompletedEmail(data: ReservationEmailData) {
+  return sendReservationStatusEmail("completed", data);
+}
+
+export async function sendReservationStatusEmail(
+  variant: ReservationEmailVariant,
+  data: ReservationEmailData
+) {
+  const config = VARIANT_CONFIG[variant];
   return sendMail({
     to: data.email,
     subject: config.subject,
-    html: renderReservationEmailHtml("cancelled", data),
+    html: renderReservationEmailHtml(variant, data),
   });
 }

@@ -7,8 +7,10 @@ import {
 
 const VARIANTS: { id: ReservationEmailVariant; label: string }[] = [
   { id: "created", label: "Talep Alındı" },
+  { id: "contacted", label: "İletişimde" },
   { id: "confirmed", label: "Onaylandı" },
   { id: "cancelled", label: "İptal" },
+  { id: "completed", label: "Tamamlandı" },
 ];
 
 export default async function EmailPreviewPage({
