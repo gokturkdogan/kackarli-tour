@@ -17,14 +17,14 @@ interface HeroLazyVideoProps {
 
 function attachVideoSources(video: HTMLVideoElement, sources: HeroVideoSources) {
   video.replaceChildren();
-  const webm = document.createElement("source");
-  webm.src = sources.webm;
-  webm.type = "video/webm";
   const mp4 = document.createElement("source");
   mp4.src = sources.mp4;
   mp4.type = "video/mp4";
-  video.appendChild(webm);
+  const webm = document.createElement("source");
+  webm.src = sources.webm;
+  webm.type = "video/webm";
   video.appendChild(mp4);
+  video.appendChild(webm);
 }
 
 export function HeroLazyVideo({ className, autoPlay = true }: HeroLazyVideoProps) {

@@ -37,14 +37,15 @@ function isWebGLAvailable() {
 
 function attachVideoSources(video: HTMLVideoElement, sources: HeroVideoSources) {
   video.replaceChildren();
-  const webm = document.createElement("source");
-  webm.src = sources.webm;
-  webm.type = "video/webm";
+  // Prefer MP4 — our H.264 encodes are higher quality than the WebM variants.
   const mp4 = document.createElement("source");
   mp4.src = sources.mp4;
   mp4.type = "video/mp4";
-  video.appendChild(webm);
+  const webm = document.createElement("source");
+  webm.src = sources.webm;
+  webm.type = "video/webm";
   video.appendChild(mp4);
+  video.appendChild(webm);
 }
 
 const vertexShader = /* glsl */ `
@@ -237,7 +238,8 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
       const targetRectRef = {
         current: null as null | { left: number; top: number; width: number; height: number },
       };
-      const dpr = () => Math.min(window.devicePixelRatio || 1, isMobile() ? 1 : 1.5);
+      const dpr = () =>
+        Math.min(window.devicePixelRatio || 1, isMobile() ? 2 : 1.5);
 
       const measureTarget = () => {
         const el = targetRef.current;
