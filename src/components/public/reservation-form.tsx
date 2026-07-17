@@ -39,8 +39,15 @@ function findInitialTour(
   tours: PublicTourReservationOption[],
   slug?: string
 ): PublicTourReservationOption | undefined {
-  if (slug) return tours.find((t) => t.slug === slug) ?? tours[0];
-  return tours[0];
+  const bookableTours = tours.filter((tour) => tour.schedules.length > 0);
+
+  if (slug) {
+    const urlTour = tours.find((t) => t.slug === slug);
+    if (urlTour && urlTour.schedules.length > 0) return urlTour;
+    return undefined;
+  }
+
+  return bookableTours[0];
 }
 
 interface ReservationFormProps {
@@ -92,10 +99,17 @@ export function ReservationForm({
   const adultCount = watch("adultCount");
   const childCount = watch("childCount");
 
-  const selectedTour = useMemo(
-    () => tours.find((t) => t.id === tourId),
-    [tours, tourId]
+  const bookableTours = useMemo(
+    () => tours.filter((tour) => tour.schedules.length > 0),
+    [tours]
   );
+
+  const selectedTour = useMemo(() => {
+    if (tourId) {
+      return tours.find((t) => t.id === tourId) ?? bookableTours[0];
+    }
+    return bookableTours[0];
+  }, [tours, tourId, bookableTours]);
 
   const selectedSchedule = useMemo(
     () => selectedTour?.schedules.find((s) => s.id === scheduleId),
@@ -109,6 +123,25 @@ export function ReservationForm({
       setValue("scheduleId", selectedTour.schedules[0]?.id ?? "");
     }
   }, [selectedTour, scheduleId, setValue]);
+
+  useEffect(() => {
+    if (!tourId && bookableTours[0]) {
+      setValue("tourId", bookableTours[0].id);
+      setValue("scheduleId", bookableTours[0].schedules[0]?.id ?? "");
+      setValue("boardingPoint", bookableTours[0].boardingPoints[0] ?? "");
+    }
+  }, [tourId, bookableTours, setValue]);
+
+  useEffect(() => {
+    const tour = findInitialTour(tours, initialTourSlug);
+    if (!tour) return;
+
+    setValue("tourId", tour.id);
+    const schedule =
+      tour.schedules.find((s) => s.id === initialScheduleId) ?? tour.schedules[0];
+    if (schedule) setValue("scheduleId", schedule.id);
+    setValue("boardingPoint", tour.boardingPoints[0] ?? "");
+  }, [initialTourSlug, initialScheduleId, tours, setValue]);
 
   const pricing = useMemo(() => {
     if (!selectedSchedule) {
@@ -151,28 +184,8 @@ export function ReservationForm({
     }
   }
 
-  if (tours.length === 0) {
-    return (
-      <section className="py-16 sm:py-20 bg-mist">
-        <PageContainer>
-          <AnimateIn className="max-w-lg mx-auto text-center rounded-3xl bg-white border border-forest-100 p-10 shadow-lg">
-            <CalendarDays className="h-12 w-12 text-forest-400 mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-forest-900 mb-2">
-              Şu an açık tur tarihi yok
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Yakında yeni tarihler eklenecek. Bilgi almak için iletişime geçebilirsiniz.
-            </p>
-            <Link
-              href="/iletisim"
-              className={cn(buttonVariants(), "bg-forest-600 hover:bg-forest-700")}
-            >
-              İletişime Geç
-            </Link>
-          </AnimateIn>
-        </PageContainer>
-      </section>
-    );
+  if (tours.length === 0 || bookableTours.length === 0) {
+    return null;
   }
 
   if (submitted) {
@@ -217,38 +230,48 @@ export function ReservationForm({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid lg:grid-cols-3 gap-8 lg:gap-10 items-start">
             <div className="lg:col-span-2 space-y-6">
-              {/* Tour selection */}
-              {tours.length > 1 && (
-                <AnimateIn>
-                  <div className="rounded-2xl bg-white border border-forest-100 p-5 sm:p-6 shadow-sm">
-                    <h2 className="text-lg font-bold text-forest-900 mb-4">Tur Seçin</h2>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      {tours.map((tour) => (
-                        <button
-                          key={tour.id}
-                          type="button"
-                          onClick={() => {
-                            setValue("tourId", tour.id);
-                            setValue("scheduleId", tour.schedules[0]?.id ?? "");
-                            setValue("boardingPoint", tour.boardingPoints[0] ?? "");
-                          }}
-                          className={cn(
-                            "text-left rounded-xl border p-4 transition-all",
-                            tourId === tour.id
-                              ? "border-sage-400 bg-sage-50/50 ring-2 ring-sage-400/30"
-                              : "border-forest-100 hover:border-forest-200 hover:bg-forest-50/30"
+              {selectedTour && (
+                <AnimateIn delay={40}>
+                  <div className="rounded-2xl bg-white border border-forest-100 overflow-hidden shadow-sm">
+                    <div className="p-5 sm:p-6 border-b border-forest-100">
+                      <div className="flex flex-col sm:flex-row">
+                        {selectedTour.image && (
+                          <div className="relative h-36 sm:h-auto sm:w-44 shrink-0 rounded-xl overflow-hidden sm:mr-5">
+                            <Image
+                              src={selectedTour.image}
+                              alt={selectedTour.title}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 640px) 100vw, 176px"
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1 sm:pt-0 pt-4">
+                          <p className="text-[10px] uppercase tracking-widest text-forest-500 font-semibold mb-1">
+                            Seçilen Tur
+                          </p>
+                          <h2 className="text-lg font-bold text-forest-900">{selectedTour.title}</h2>
+                          {selectedTour.subtitle && (
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {selectedTour.subtitle}
+                            </p>
                           )}
-                        >
-                          <p className="font-semibold text-forest-900 text-sm">{tour.title}</p>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {tourTypeLabel(tour.type)}
-                            {tour.duration ? ` · ${tour.duration}` : ""}
-                          </p>
-                          <p className="text-xs text-forest-600 mt-2 font-medium">
-                            {tour.schedules.length} açık tarih
-                          </p>
-                        </button>
-                      ))}
+                          <div className="flex flex-wrap gap-2 mt-3 text-xs text-forest-600">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-forest-50 border border-forest-100 px-2.5 py-1">
+                              {tourTypeLabel(selectedTour.type)}
+                            </span>
+                            {selectedTour.duration && (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-forest-50 border border-forest-100 px-2.5 py-1">
+                                <CalendarDays className="h-3 w-3" />
+                                {selectedTour.duration}
+                              </span>
+                            )}
+                            <span className="inline-flex items-center gap-1 rounded-full bg-sage-50 border border-sage-200 px-2.5 py-1 text-forest-700 font-medium">
+                              {selectedTour.schedules.length} açık tarih
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </AnimateIn>

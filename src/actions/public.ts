@@ -102,6 +102,5 @@ export async function getToursForReservation(): Promise<PublicTourReservationOpt
             hasCustomPrice: schedule.price != null || schedule.childPrice != null,
           };
         }),
-    }))
-    .filter((tour) => tour.schedules.length > 0);
+    }));
 }

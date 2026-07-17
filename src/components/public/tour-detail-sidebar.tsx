@@ -1,5 +1,8 @@
+import Link from "next/link";
 import {
+  ArrowRight,
   Bus,
+  CalendarCheck,
   CheckCircle2,
   Clock,
   Coffee,
@@ -10,7 +13,6 @@ import {
   Users,
   UtensilsCrossed,
 } from "lucide-react";
-import { ScrollToBookingCta } from "@/components/public/scroll-to-booking-cta";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/utils-helpers";
 import { hasDistinctChildPrice, resolveChildPrice } from "@/lib/pricing";
@@ -192,7 +194,20 @@ export function TourDetailSidebar({ tour }: TourDetailSidebarProps) {
 
           {/* Actions */}
           <div className="pt-1">
-            <ScrollToBookingCta />
+            <Link
+              href={`/rezervasyon?tur=${tour.slug}`}
+              className={cn(
+                "group flex items-center justify-center gap-2.5 w-full",
+                "h-14 rounded-2xl text-base px-5",
+                "bg-sage-500 hover:bg-sage-400 text-white font-bold",
+                "shadow-lg shadow-sage-500/25 transition-all duration-300",
+                "hover:-translate-y-0.5 hover:shadow-xl hover:shadow-sage-500/30"
+              )}
+            >
+              <CalendarCheck className="h-5 w-5" />
+              Rezervasyon Yap
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </div>
       </div>

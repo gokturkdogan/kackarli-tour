@@ -92,7 +92,7 @@ export function TourDetailView({ tour, showItinerary = true }: TourDetailViewPro
               </AnimateIn>
             </div>
 
-            <div className="lg:col-span-1">
+            <div className="hidden lg:block lg:col-span-1">
               <AnimateIn delay={150}>
                 <div className="sticky top-24">
                   <TourDetailSidebar tour={tour} />
