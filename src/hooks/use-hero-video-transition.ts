@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { HeroVideoSources } from "@/lib/hero-video";
 import { scheduleIdleWork } from "@/lib/hero-video";
+import { getLayoutViewportHeight } from "@/lib/viewport-height";
 
 const CAMERA_FOV = 50;
 const CAMERA_Z = 10;
@@ -147,8 +148,10 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
       if (cancelled || !sectionRef.current || !canvasRef.current) return;
 
       gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.config({ ignoreMobileResize: true });
 
       const isMobile = () => window.matchMedia("(max-width: 767px)").matches;
+      const layoutHeight = () => getLayoutViewportHeight();
       const videoInset = () => (isMobile() ? VIDEO_INSET_MOBILE : VIDEO_INSET_DESKTOP);
       const cardVideoRadius = () => (isMobile() ? CARD_RADIUS_MOBILE : CARD_RADIUS_DESKTOP);
 
@@ -321,7 +324,7 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
       render();
 
       const editorialScrollDistance = () =>
-        Math.max(window.innerHeight * 0.4, isMobile() ? 200 : 260);
+        Math.max(layoutHeight() * 0.4, isMobile() ? 200 : 260);
 
       gsap.set(heroContentRef.current, { autoAlpha: 1, y: 0 });
       gsap.set(editorialRef.current, { y: editorialScrollDistance() });
@@ -334,12 +337,12 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
           end: () =>
             "+=" +
             (isMobile() ? SCROLL_DISTANCE_MOBILE : SCROLL_DISTANCE_DESKTOP) *
-              window.innerHeight,
+              layoutHeight(),
           pin: sectionRef.current,
           pinSpacing: true,
-          anticipatePin: 1,
+          anticipatePin: isMobile() ? 0 : 1,
           scrub: 0.35,
-          invalidateOnRefresh: true,
+          invalidateOnRefresh: !isMobile(),
           onRefreshInit: () => {
             resize();
             gsap.set(editorialRef.current, { y: editorialScrollDistance() });
@@ -366,19 +369,25 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
       tl.to(editorialRef.current, { y: 0, duration: 0.48, ease: "none" }, 0.1);
 
       let resizeTimer = 0;
+      const refreshScrollTrigger = () => {
+        resize();
+        ScrollTrigger.refresh();
+      };
       const onResize = () => {
+        resize();
+        if (isMobile()) return;
         window.clearTimeout(resizeTimer);
-        resizeTimer = window.setTimeout(() => {
-          resize();
-          ScrollTrigger.refresh();
-        }, 150);
+        resizeTimer = window.setTimeout(refreshScrollTrigger, 150);
+      };
+      const onOrientation = () => {
+        window.setTimeout(refreshScrollTrigger, 120);
       };
       const onVisibility = () => {
         if (document.hidden) video.pause();
         else playVideo();
       };
       window.addEventListener("resize", onResize);
-      window.addEventListener("orientationchange", onResize);
+      window.addEventListener("orientationchange", onOrientation);
       document.addEventListener("visibilitychange", onVisibility);
 
       scheduleIdleWork(() => {
@@ -393,7 +402,7 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
         cancelAnimationFrame(rafId);
         window.clearTimeout(resizeTimer);
         window.removeEventListener("resize", onResize);
-        window.removeEventListener("orientationchange", onResize);
+        window.removeEventListener("orientationchange", onOrientation);
         document.removeEventListener("visibilitychange", onVisibility);
 
         tl.scrollTrigger?.kill();

@@ -124,6 +124,13 @@
   body {
     @apply bg-background text-foreground overflow-x-hidden min-w-0;
   }
+  /* Stable viewport — avoids mobile URL bar resize jitter (use instead of dvh). */
+  .h-hero-vh {
+    height: calc(var(--vh, 1vh) * 100);
+  }
+  .min-h-hero-vh {
+    min-height: calc(var(--vh, 1vh) * 100);
+  }
   button:not(:disabled),
   [type="button"]:not(:disabled),
   [type="submit"]:not(:disabled),

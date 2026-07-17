@@ -4,7 +4,7 @@ import { HERO_POSTER_SRC } from "@/lib/hero-video";
 /** Lightweight hero shell shown while the heavy HeroBanner chunk loads. */
 export function HeroPosterShell() {
   return (
-    <section className="relative h-[100dvh] w-full bg-background overflow-hidden">
+    <section className="relative h-hero-vh w-full bg-background overflow-hidden">
       <Image
         src={HERO_POSTER_SRC}
         alt="Rize yayla manzarası"

@@ -149,8 +149,8 @@ function ScrollHint() {
 function StaticHero() {
   return (
     <>
-      <section className="relative min-h-[100dvh] bg-background">
-        <div className="relative flex min-h-[100dvh] items-start lg:items-center">
+      <section className="relative min-h-hero-vh bg-background">
+        <div className="relative flex min-h-hero-vh items-start lg:items-center">
           <div className="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-20">
             <PublicHeader variant="transparent" position="hero" />
           </div>
@@ -220,7 +220,7 @@ function AnimatedHero() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[100dvh] w-full max-w-full bg-background"
+      className="relative h-hero-vh w-full max-w-full bg-background"
     >
       <div className="relative h-full w-full">
         {/* Layer 0: editorial copy scrolls up behind the video */}
