@@ -35,30 +35,11 @@ export function shouldLoadHeroVideo() {
   return !slow;
 }
 
-/** Use full-quality hero video on mobile when the connection allows it. */
-export function shouldUseHighQualityHeroVideo() {
-  if (typeof window === "undefined") return true;
-  const conn = (
-    navigator as Navigator & {
-      connection?: { saveData?: boolean; effectiveType?: string };
-    }
-  ).connection;
-  if (!conn) return true;
-  if (conn.saveData) return false;
-  const slow =
-    conn.effectiveType === "slow-2g" ||
-    conn.effectiveType === "2g" ||
-    conn.effectiveType === "3g";
-  return !slow;
-}
-
 export function getHeroVideoSources(): HeroVideoSources {
   const mobile = isMobileViewport();
-  const highQuality = shouldUseHighQualityHeroVideo();
-  const useDesktop = !mobile || highQuality;
   return {
-    mp4: useDesktop ? HERO_VIDEO.mp4.desktop : HERO_VIDEO.mp4.mobile,
-    webm: useDesktop ? HERO_VIDEO.webm.desktop : HERO_VIDEO.webm.mobile,
+    mp4: mobile ? HERO_VIDEO.mp4.mobile : HERO_VIDEO.mp4.desktop,
+    webm: mobile ? HERO_VIDEO.webm.mobile : HERO_VIDEO.webm.desktop,
   };
 }
 
