@@ -1,5 +1,4 @@
 import { getActivePublicTours } from "@/actions/public";
-import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { HeroBanner } from "@/components/public/hero-banner";
 import { DestinationMarquee } from "@/components/public/destination-marquee";
@@ -20,7 +19,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <PublicHeader variant="transparent" />
       <main className="overflow-x-hidden w-full max-w-full">
         <HeroBanner />
         <DestinationMarquee />

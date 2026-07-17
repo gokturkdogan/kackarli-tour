@@ -35,12 +35,18 @@ const navLinks = [
 
 interface PublicHeaderProps {
   variant?: "transparent" | "solid";
+  /** `hero` = absolute inside hero frame, scrolls away with content. */
+  position?: "fixed" | "hero";
 }
 
-export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
+export function PublicHeader({
+  variant = "transparent",
+  position = "fixed",
+}: PublicHeaderProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isTransparent = variant === "transparent";
+  const isHero = position === "hero";
 
   function closeMenu() {
     setOpen(false);
@@ -49,10 +55,13 @@ export function PublicHeader({ variant = "transparent" }: PublicHeaderProps) {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 w-full max-w-full transition-all duration-300",
-        isTransparent
-          ? "bg-forest-900/40 backdrop-blur-md border-b border-cream/10"
-          : "bg-cream/95 backdrop-blur-md border-b border-forest-100 shadow-sm"
+        "top-0 left-0 right-0 z-50 w-full max-w-full transition-all duration-300",
+        isHero ? "relative" : "fixed",
+        isHero
+          ? "bg-transparent border-b border-transparent"
+          : isTransparent
+            ? "bg-forest-900/40 backdrop-blur-md border-b border-cream/10"
+            : "bg-cream/95 backdrop-blur-md border-b border-forest-100 shadow-sm"
       )}
     >
       <div className={pageContainerClass("h-16 flex items-center justify-between gap-2 min-w-0")}>
