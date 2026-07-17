@@ -1,6 +1,7 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore, useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Phone, Star } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -8,10 +9,13 @@ import { cn } from "@/lib/utils";
 import { AnimateIn } from "@/components/public/animate-in";
 import { PageContainer } from "@/components/public/page-container";
 import { PublicHeader } from "@/components/public/public-header";
+import { HeroLazyVideo } from "@/components/public/hero-lazy-video";
 import { useHeroVideoTransition } from "@/hooks/use-hero-video-transition";
-
-const VIDEO_SRC = "/videos/rize-hero.mp4";
-const POSTER_SRC = "/images/rize-hero-poster.jpg";
+import {
+  getHeroVideoSources,
+  HERO_POSTER_SRC,
+  shouldLoadHeroVideo,
+} from "@/lib/hero-video";
 
 function prefersReducedMotion() {
   return (
@@ -42,7 +46,7 @@ function subscribeMotion(callback: () => void) {
   return () => mq.removeEventListener("change", callback);
 }
 function getAnimatedSnapshot() {
-  return !prefersReducedMotion() && webglSupported();
+  return !prefersReducedMotion() && webglSupported() && shouldLoadHeroVideo();
 }
 function getAnimatedServerSnapshot() {
   return false;
@@ -151,17 +155,16 @@ function StaticHero() {
             <PublicHeader variant="transparent" position="hero" />
           </div>
 
-          <div className="absolute inset-3 sm:inset-4 overflow-hidden rounded-[24px] sm:rounded-[32px]">
-            <video
-              className="absolute inset-0 h-full w-full object-cover"
-              src={VIDEO_SRC}
-              poster={POSTER_SRC}
-              muted
-              loop
-              playsInline
-              autoPlay
-              preload="metadata"
+          <div className="absolute inset-0 overflow-hidden">
+            <Image
+              src={HERO_POSTER_SRC}
+              alt="Rize yayla manzarası"
+              fill
+              priority
+              className="object-cover"
+              sizes="100vw"
             />
+            <HeroLazyVideo className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-forest-900/65 via-forest-900/35 to-forest-900/85 pointer-events-none" />
             <div className="absolute inset-0 bg-gradient-to-r from-forest-900/75 via-forest-900/25 to-transparent pointer-events-none" />
           </div>
@@ -178,16 +181,14 @@ function StaticHero() {
         <PageContainer>
           <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-8 lg:gap-14 items-center">
             <div className="relative w-full h-[40vh] lg:h-[62vh] rounded-[20px] lg:rounded-[28px] overflow-hidden bg-forest-800">
-              <video
-                className="absolute inset-0 w-full h-full object-cover"
-                src={VIDEO_SRC}
-                poster={POSTER_SRC}
-                muted
-                loop
-                playsInline
-                autoPlay
-                preload="metadata"
+              <Image
+                src={HERO_POSTER_SRC}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
+              <HeroLazyVideo className="absolute inset-0 h-full w-full object-cover" />
             </div>
             <div className="flex flex-col gap-5 lg:gap-6">
               <EditorialCopy />
@@ -201,15 +202,20 @@ function StaticHero() {
 
 /** Animated variant: pinned WebGL video transition (hero → left editorial card). */
 function AnimatedHero() {
+  const sources = useMemo(() => getHeroVideoSources(), []);
   const {
     sectionRef,
     canvasRef,
+    posterRef,
     headerRef,
     heroContentRef,
     targetRef,
     editorialRef,
     rightItemsRef,
-  } = useHeroVideoTransition({ videoSrc: VIDEO_SRC, enabled: true });
+  } = useHeroVideoTransition({
+    sources,
+    enabled: true,
+  });
 
   return (
     <section
@@ -239,6 +245,24 @@ function AnimatedHero() {
               </div>
             </div>
           </PageContainer>
+        </div>
+
+        {/* Layer 0.5: poster — visible until video plays */}
+        <div
+          ref={posterRef}
+          className="absolute inset-0 pointer-events-none"
+          style={{ zIndex: 0 }}
+        >
+          <Image
+            src={HERO_POSTER_SRC}
+            alt="Rize yayla manzarası"
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest-900/65 via-forest-900/35 to-forest-900/85" />
+          <div className="absolute inset-0 bg-gradient-to-r from-forest-900/75 via-forest-900/25 to-transparent" />
         </div>
 
         {/* Layer 1: WebGL canvas — video sits above rising editorial text */}
