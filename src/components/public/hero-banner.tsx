@@ -165,8 +165,8 @@ function StaticHero() {
               sizes="100vw"
             />
             <HeroLazyVideo className="absolute inset-0 h-full w-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-b from-forest-900/65 via-forest-900/35 to-forest-900/85 pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-r from-forest-900/75 via-forest-900/25 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-forest-900/38 via-forest-900/15 to-forest-900/55 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-forest-900/45 via-forest-900/12 to-transparent pointer-events-none" />
           </div>
 
           <PageContainer className="relative pt-28 pb-20 sm:pt-32 lg:py-24">
@@ -261,8 +261,8 @@ function AnimatedHero() {
             className="object-cover"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-900/65 via-forest-900/35 to-forest-900/85" />
-          <div className="absolute inset-0 bg-gradient-to-r from-forest-900/75 via-forest-900/25 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest-900/38 via-forest-900/15 to-forest-900/55" />
+          <div className="absolute inset-0 bg-gradient-to-r from-forest-900/45 via-forest-900/12 to-transparent" />
         </div>
 
         {/* Layer 1: WebGL canvas — video sits above rising editorial text */}

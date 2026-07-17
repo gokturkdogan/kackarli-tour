@@ -316,8 +316,8 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
         uniforms.uUvOffset.value.set((1 - sx) / 2, (1 - sy) / 2);
 
         const filterFade = motion;
-        uniforms.uTint.value = lerp(0.38, 0.0, filterFade);
-        uniforms.uOverlay.value = lerp(0.55, 0.04, filterFade);
+        uniforms.uTint.value = lerp(0.18, 0.0, filterFade);
+        uniforms.uOverlay.value = lerp(0.28, 0.04, filterFade);
 
         renderer.render(scene, camera);
       };
