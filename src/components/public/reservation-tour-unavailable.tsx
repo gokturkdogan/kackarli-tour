@@ -61,6 +61,7 @@ export function ReservationTourUnavailable({ tour }: ReservationTourUnavailableP
       <section className="py-12 sm:py-16 bg-cream">
         <PageContainer>
           <div className="max-w-4xl mx-auto space-y-8">
+            adasdad
             <AnimateIn>
               <div className="relative rounded-3xl overflow-hidden aspect-[16/9]">
                 {tour.image ? (

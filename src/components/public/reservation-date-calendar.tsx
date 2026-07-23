@@ -15,11 +15,9 @@ interface ReservationDateCalendarProps {
   selectedScheduleId: string;
   onSelectSchedule: (scheduleId: string) => void;
   adultCount: number;
-  childCount: number;
   maxGuests: number;
   adultUnitPrice: number;
-  childUnitPrice: number;
-  onAdjustCount: (field: "adultCount" | "childCount", delta: number) => void;
+  onAdjustAdultCount: (delta: number) => void;
 }
 
 function getMonthGrid(month: Date): { date: Date; inMonth: boolean }[] {
@@ -111,11 +109,9 @@ export function ReservationDateCalendar({
   selectedScheduleId,
   onSelectSchedule,
   adultCount,
-  childCount,
   maxGuests,
   adultUnitPrice,
-  childUnitPrice,
-  onAdjustCount,
+  onAdjustAdultCount,
 }: ReservationDateCalendarProps) {
   const today = useMemo(() => {
     const d = new Date();
@@ -136,8 +132,7 @@ export function ReservationDateCalendar({
   }, [schedules]);
 
   const selectedSchedule = schedules.find((s) => s.id === selectedScheduleId);
-  const guestsTotal = adultCount + childCount;
-  const canAddGuest = guestsTotal < maxGuests;
+  const canAddGuest = adultCount < maxGuests;
 
   const [month, setMonth] = useState(() => {
     const ref = selectedSchedule ?? schedules[0];
@@ -296,26 +291,15 @@ export function ReservationDateCalendar({
           <p className="text-xs text-muted-foreground text-center py-1">Önce müsait bir gün seçin</p>
         )}
 
-        <div className="grid sm:grid-cols-2 gap-2">
-          <GuestStepper
-            label="Yetişkin"
-            hint={formatPrice(adultUnitPrice)}
-            value={adultCount}
-            min={1}
-            canIncrease={canAddGuest}
-            onDecrease={() => onAdjustCount("adultCount", -1)}
-            onIncrease={() => onAdjustCount("adultCount", 1)}
-          />
-          <GuestStepper
-            label="Çocuk"
-            hint={formatPrice(childUnitPrice)}
-            value={childCount}
-            min={0}
-            canIncrease={canAddGuest}
-            onDecrease={() => onAdjustCount("childCount", -1)}
-            onIncrease={() => onAdjustCount("childCount", 1)}
-          />
-        </div>
+        <GuestStepper
+          label="Kişi Sayısı"
+          hint={formatPrice(adultUnitPrice)}
+          value={adultCount}
+          min={1}
+          canIncrease={canAddGuest}
+          onDecrease={() => onAdjustAdultCount(-1)}
+          onIncrease={() => onAdjustAdultCount(1)}
+        />
       </div>
 
       <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-muted-foreground">

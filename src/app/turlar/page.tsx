@@ -68,7 +68,7 @@ export default async function ToursPage() {
                             src={tour.image}
                             alt={tour.title}
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="object-cover object-[center_10%] group-hover:scale-105 transition-transform duration-500"
                             sizes="(max-width: 768px) 100vw, 50vw"
                           />
                         ) : (

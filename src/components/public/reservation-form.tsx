@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import {
   CalendarDays,
   CheckCircle2,
+  ChevronRight,
   Loader2,
   MapPin,
   Send,
@@ -33,7 +34,7 @@ import { formatScheduleLabel } from "@/lib/date-helpers";
 import { formatPrice, tourTypeLabel } from "@/lib/utils-helpers";
 import { reservationSchema, type ReservationFormData } from "@/lib/validations";
 import { createReservation } from "@/actions/reservations";
-import type { PublicTourReservationOption } from "@/lib/tour-types";
+import type { PublicTourReservationOption, PublicScheduleOption } from "@/lib/tour-types";
 
 function findInitialTour(
   tours: PublicTourReservationOption[],
@@ -60,6 +61,202 @@ const fieldInputClass =
   "h-11 bg-forest-50/40 border-forest-100 placeholder:text-muted-foreground/60 focus-visible:bg-white focus-visible:border-sage-400 focus-visible:ring-sage-400/20";
 
 const fieldLabelClass = "text-sm font-medium text-forest-800";
+
+interface ReservationSummaryPanelProps {
+  selectedTour?: PublicTourReservationOption;
+  selectedSchedule?: PublicScheduleOption;
+  adultCount: number;
+  boardingPoint?: string;
+  pricing: { adultPrice: number; total: number };
+  isSubmitting: boolean;
+  variant: "sidebar" | "mobile";
+}
+
+function ReservationSummaryPanel({
+  selectedTour,
+  selectedSchedule,
+  adultCount,
+  boardingPoint,
+  pricing,
+  isSubmitting,
+  variant,
+}: ReservationSummaryPanelProps) {
+  const submitButton = (
+    <Button
+      type="submit"
+      disabled={isSubmitting || !selectedSchedule}
+      className={cn(
+        "font-bold text-white transition-all",
+        variant === "mobile"
+          ? "h-12 shrink-0 rounded-xl px-5 bg-sage-500 hover:bg-sage-400 shadow-lg shadow-sage-500/30 hover:shadow-xl hover:shadow-sage-500/35 disabled:shadow-none"
+          : "w-full h-12 bg-sage-500 hover:bg-sage-400"
+      )}
+    >
+      {isSubmitting ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          {variant === "mobile" ? "Gönderiliyor" : "Gönderiliyor..."}
+        </>
+      ) : (
+        <>
+          {variant === "mobile" ? (
+            <>
+              Talep Gönder
+              <ChevronRight className="ml-1 h-4 w-4" />
+            </>
+          ) : (
+            <>
+              <Send className="mr-2 h-4 w-4" />
+              Rezervasyon Talebi Gönder
+            </>
+          )}
+        </>
+      )}
+    </Button>
+  );
+
+  if (variant === "mobile") {
+    if (!selectedSchedule) {
+      return (
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-forest-900">Tarih seçin</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Müsait bir gün seçerek devam edin
+            </p>
+          </div>
+          {submitButton}
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-3">
+        <div className="min-w-0">
+          {selectedTour && (
+            <p className="text-[10px] uppercase tracking-widest font-semibold text-forest-500 mb-1">
+              Rezervasyon Özeti
+            </p>
+          )}
+          {selectedTour && (
+            <p className="text-sm font-bold text-forest-900 truncate leading-snug">
+              {selectedTour.title}
+            </p>
+          )}
+          <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-1.5 text-xs text-forest-600">
+            <span className="inline-flex items-center gap-1.5 min-w-0">
+              <CalendarDays className="h-3.5 w-3.5 shrink-0 text-sage-600" />
+              <span className="truncate font-medium">
+                {formatScheduleLabel(
+                  new Date(selectedSchedule.startDate),
+                  selectedSchedule.endDate ? new Date(selectedSchedule.endDate) : null
+                )}
+              </span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 shrink-0">
+              <Users className="h-3.5 w-3.5 text-sage-600" />
+              <span className="font-medium">{adultCount} kişi</span>
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between gap-3 rounded-xl bg-gradient-to-r from-forest-50 to-sage-50/60 border border-forest-100 px-3.5 py-2.5">
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-widest font-semibold text-forest-500">
+              Toplam Tutar
+            </p>
+            <p className="text-2xl font-bold text-forest-900 leading-none tabular-nums mt-0.5">
+              {formatPrice(pricing.total)}
+            </p>
+          </div>
+          {submitButton}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {selectedTour?.image && (
+        <div className="relative h-36">
+          <Image
+            src={selectedTour.image}
+            alt={selectedTour.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 360px"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-900/80 to-transparent" />
+          <div className="absolute bottom-3 left-4 right-4">
+            <p className="text-cream font-bold text-sm leading-snug">{selectedTour.title}</p>
+          </div>
+        </div>
+      )}
+
+      <div className="p-5 sm:p-6 space-y-5">
+        {!selectedTour?.image && selectedTour && (
+          <div>
+            <p className="font-bold text-forest-900">{selectedTour.title}</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {tourTypeLabel(selectedTour.type)}
+            </p>
+          </div>
+        )}
+
+        {selectedSchedule && (
+          <div className="rounded-xl bg-forest-50 border border-forest-100 p-4 space-y-2">
+            <div className="flex items-start gap-2">
+              <CalendarDays className="h-4 w-4 text-forest-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider">
+                  Seçilen Tarih
+                </p>
+                <p className="text-sm font-medium text-forest-900 leading-snug">
+                  {formatScheduleLabel(
+                    new Date(selectedSchedule.startDate),
+                    selectedSchedule.endDate ? new Date(selectedSchedule.endDate) : null
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Users className="h-3.5 w-3.5" />
+              {adultCount} kişi
+            </div>
+            {boardingPoint && (
+              <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                {boardingPoint}
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="space-y-2 border-t border-forest-100 pt-4">
+          {adultCount > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Kişi × {adultCount}</span>
+              <span className="font-medium text-forest-900">
+                {formatPrice(pricing.adultPrice * adultCount)}
+              </span>
+            </div>
+          )}
+          <div className="flex justify-between items-end pt-2">
+            <span className="font-semibold text-forest-900">Toplam</span>
+            <span className="text-2xl font-bold text-forest-900">
+              {formatPrice(pricing.total)}
+            </span>
+          </div>
+          <p className="text-[10px] text-muted-foreground leading-snug">
+            Onay sonrası ödeme detayları sizinle paylaşılacaktır.
+          </p>
+        </div>
+
+        {submitButton}
+      </div>
+    </>
+  );
+}
 
 export function ReservationForm({
   tours,
@@ -97,7 +294,6 @@ export function ReservationForm({
   const tourId = watch("tourId");
   const scheduleId = watch("scheduleId");
   const adultCount = watch("adultCount");
-  const childCount = watch("childCount");
 
   const bookableTours = useMemo(
     () => tours.filter((tour) => tour.schedules.length > 0),
@@ -145,32 +341,27 @@ export function ReservationForm({
 
   const pricing = useMemo(() => {
     if (!selectedSchedule) {
-      return { adultPrice: 0, childPrice: 0, total: 0 };
+      return { adultPrice: 0, total: 0 };
     }
     const adultPrice = selectedSchedule.adultPrice;
-    const childPrice = selectedSchedule.childPrice;
     return {
       adultPrice,
-      childPrice,
-      total: adultCount * adultPrice + childCount * childPrice,
+      total: adultCount * adultPrice,
     };
-  }, [selectedSchedule, adultCount, childCount]);
+  }, [selectedSchedule, adultCount]);
 
   const maxGuests = selectedSchedule?.spotsLeft ?? 1;
 
-  function adjustCount(field: "adultCount" | "childCount", delta: number) {
-    const current = field === "adultCount" ? adultCount : childCount;
-    const other = field === "adultCount" ? childCount : adultCount;
-    const next = current + delta;
+  function adjustAdultCount(delta: number) {
+    const next = adultCount + delta;
 
-    if (field === "adultCount" && next < 1) return;
-    if (field === "childCount" && next < 0) return;
-    if (next + other > maxGuests) {
+    if (next < 1) return;
+    if (next > maxGuests) {
       toast.error(`Bu tarihte en fazla ${maxGuests} kişi rezervasyon yapılabilir`);
       return;
     }
 
-    setValue(field, next);
+    setValue("adultCount", next);
   }
 
   async function onSubmit(data: ReservationFormData) {
@@ -222,7 +413,7 @@ export function ReservationForm({
   }
 
   return (
-    <section className="py-12 sm:py-16 bg-mist relative overflow-hidden">
+    <section className="py-12 sm:py-16 pb-32 lg:pb-16 bg-mist relative overflow-hidden">
       <div className="absolute top-0 right-0 w-72 h-72 bg-sage-200/30 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-forest-100/40 rounded-full blur-3xl pointer-events-none" />
 
@@ -241,7 +432,7 @@ export function ReservationForm({
                               src={selectedTour.image}
                               alt={selectedTour.title}
                               fill
-                              className="object-cover"
+                              className="object-cover object-[center_5%] sm:object-center"
                               sizes="(max-width: 640px) 100vw, 176px"
                             />
                           </div>
@@ -289,11 +480,9 @@ export function ReservationForm({
                       selectedScheduleId={scheduleId}
                       onSelectSchedule={(id) => setValue("scheduleId", id, { shouldValidate: true })}
                       adultCount={adultCount}
-                      childCount={childCount}
                       maxGuests={maxGuests}
                       adultUnitPrice={pricing.adultPrice}
-                      childUnitPrice={pricing.childPrice}
-                      onAdjustCount={adjustCount}
+                      onAdjustAdultCount={adjustAdultCount}
                     />
                   ) : (
                     <p className="text-sm text-muted-foreground">Bu tur için açık tarih yok.</p>
@@ -418,120 +607,39 @@ export function ReservationForm({
               </AnimateIn>
             </div>
 
-            {/* Summary sidebar */}
-            <div className="lg:col-span-1">
+            {/* Summary sidebar — desktop */}
+            <div className="hidden lg:block lg:col-span-1">
               <AnimateIn delay={200}>
                 <div className="sticky top-24 rounded-2xl bg-white border border-forest-100 shadow-xl overflow-hidden">
-                  {selectedTour?.image && (
-                    <div className="relative h-36">
-                      <Image
-                        src={selectedTour.image}
-                        alt={selectedTour.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 1024px) 100vw, 360px"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-forest-900/80 to-transparent" />
-                      <div className="absolute bottom-3 left-4 right-4">
-                        <p className="text-cream font-bold text-sm leading-snug">
-                          {selectedTour.title}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="p-5 sm:p-6 space-y-5">
-                    {!selectedTour?.image && selectedTour && (
-                      <div>
-                        <p className="font-bold text-forest-900">{selectedTour.title}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {tourTypeLabel(selectedTour.type)}
-                        </p>
-                      </div>
-                    )}
-
-                    {selectedSchedule && (
-                      <div className="rounded-xl bg-forest-50 border border-forest-100 p-4 space-y-2">
-                        <div className="flex items-start gap-2">
-                          <CalendarDays className="h-4 w-4 text-forest-600 mt-0.5 shrink-0" />
-                          <div>
-                            <p className="text-xs text-muted-foreground uppercase tracking-wider">
-                              Seçilen Tarih
-                            </p>
-                            <p className="text-sm font-medium text-forest-900 leading-snug">
-                              {formatScheduleLabel(
-                                new Date(selectedSchedule.startDate),
-                                selectedSchedule.endDate
-                                  ? new Date(selectedSchedule.endDate)
-                                  : null
-                              )}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <Users className="h-3.5 w-3.5" />
-                          {adultCount} yetişkin
-                          {childCount > 0 ? ` · ${childCount} çocuk` : ""}
-                        </div>
-                        {watch("boardingPoint") && (
-                          <div className="flex items-start gap-2 text-xs text-muted-foreground">
-                            <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-                            {watch("boardingPoint")}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    <div className="space-y-2 border-t border-forest-100 pt-4">
-                      {adultCount > 0 && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            Yetişkin × {adultCount}
-                          </span>
-                          <span className="font-medium text-forest-900">
-                            {formatPrice(pricing.adultPrice * adultCount)}
-                          </span>
-                        </div>
-                      )}
-                      {childCount > 0 && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Çocuk × {childCount}</span>
-                          <span className="font-medium text-forest-900">
-                            {formatPrice(pricing.childPrice * childCount)}
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex justify-between items-end pt-2">
-                        <span className="font-semibold text-forest-900">Toplam</span>
-                        <span className="text-2xl font-bold text-forest-900">
-                          {formatPrice(pricing.total)}
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-muted-foreground leading-snug">
-                        Onay sonrası ödeme detayları sizinle paylaşılacaktır.
-                      </p>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting || !selectedSchedule}
-                      className="w-full h-12 bg-sage-500 hover:bg-sage-400 text-white font-bold"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Gönderiliyor...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2 h-4 w-4" />
-                          Rezervasyon Talebi Gönder
-                        </>
-                      )}
-                    </Button>
-                  </div>
+                  <ReservationSummaryPanel
+                    variant="sidebar"
+                    selectedTour={selectedTour}
+                    selectedSchedule={selectedSchedule}
+                    adultCount={adultCount}
+                    boardingPoint={watch("boardingPoint")}
+                    pricing={pricing}
+                    isSubmitting={isSubmitting}
+                  />
                 </div>
               </AnimateIn>
+            </div>
+          </div>
+
+          {/* Mobile fixed summary bar */}
+          <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden">
+            <div className="w-full rounded-t-2xl border-t border-forest-100/90 bg-white/95 backdrop-blur-xl shadow-[0_-8px_40px_rgba(26,46,35,0.12)] overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-forest-600 via-sage-500 to-forest-500" />
+              <div className="px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                <ReservationSummaryPanel
+                  variant="mobile"
+                  selectedTour={selectedTour}
+                  selectedSchedule={selectedSchedule}
+                  adultCount={adultCount}
+                  boardingPoint={watch("boardingPoint")}
+                  pricing={pricing}
+                  isSubmitting={isSubmitting}
+                />
+              </div>
             </div>
           </div>
         </form>
