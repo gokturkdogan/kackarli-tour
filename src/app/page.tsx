@@ -1,7 +1,5 @@
 import { getActiveDayTripTourCount, getActivePublicTours } from "@/actions/public";
 import { PublicFooter } from "@/components/public/public-footer";
-import { HomeScrollHeader } from "@/components/public/home-scroll-header";
-import { HomeStickySentinel } from "@/components/public/home-sticky-sentinel";
 import { HeroBanner } from "@/components/public/hero-banner-loader";
 import { DestinationMarquee } from "@/components/public/destination-marquee";
 import { StatsBar } from "@/components/public/stats-bar";
@@ -24,10 +22,8 @@ export default async function HomePage() {
 
   return (
     <>
-      <HomeScrollHeader />
       <main className="overflow-x-hidden w-full max-w-full">
         <HeroBanner />
-        <HomeStickySentinel />
         <DestinationMarquee />
         <StatsBar dayTripRouteCount={dayTripRouteCount} />
         <RizeHighlights />
