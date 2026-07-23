@@ -1,69 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PublicHeader } from "@/components/public/public-header";
-import {
-  getHomeStickyHeaderRevealOffset,
-  HOME_HERO_HEADER_ID,
-} from "@/lib/home-hero";
+import { HOME_STICKY_SENTINEL_ID } from "@/lib/home-hero";
 import { cn } from "@/lib/utils";
 
-function shouldShowStickyHeader() {
-  const heroHeader = document.getElementById(HOME_HERO_HEADER_ID);
-  if (!heroHeader) return false;
-
-  const heroInView = heroHeader.getBoundingClientRect().bottom > 0;
-  const scrolledEnough = window.scrollY >= getHomeStickyHeaderRevealOffset();
-
-  return scrolledEnough && !heroInView;
+function isSentinelPassed(entry: IntersectionObserverEntry) {
+  return !entry.isIntersecting && entry.boundingClientRect.top < 0;
 }
 
 export function HomeScrollHeader() {
   const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const visibleRef = useRef(false);
 
   useEffect(() => {
-    let rafId = 0;
-    let scrollBound = false;
+    const sentinel = document.getElementById(HOME_STICKY_SENTINEL_ID);
+    if (!sentinel) return;
 
-    const onScrollOrResize = () => {
-      if (rafId) return;
-      rafId = window.requestAnimationFrame(() => {
-        rafId = 0;
-        setVisible(shouldShowStickyHeader());
-      });
+    const setStickyVisible = (next: boolean) => {
+      if (next === visibleRef.current) return;
+      visibleRef.current = next;
+      setVisible(next);
+      if (next) setMounted(true);
     };
 
-    const bindScroll = () => {
-      if (scrollBound) return;
-      scrollBound = true;
-      window.addEventListener("scroll", onScrollOrResize, { passive: true });
-      window.addEventListener("resize", onScrollOrResize);
-      onScrollOrResize();
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setStickyVisible(isSentinelPassed(entry));
+      },
+      { threshold: 0 }
+    );
 
-    if (document.getElementById(HOME_HERO_HEADER_ID)) {
-      bindScroll();
-    } else {
-      const mutationObserver = new MutationObserver(() => {
-        if (!document.getElementById(HOME_HERO_HEADER_ID)) return;
-        bindScroll();
-        mutationObserver.disconnect();
-      });
-      mutationObserver.observe(document.body, { childList: true, subtree: true });
+    observer.observe(sentinel);
 
-      return () => {
-        mutationObserver.disconnect();
-        window.removeEventListener("scroll", onScrollOrResize);
-        window.removeEventListener("resize", onScrollOrResize);
-        if (rafId) window.cancelAnimationFrame(rafId);
-      };
-    }
-
-    return () => {
-      window.removeEventListener("scroll", onScrollOrResize);
-      window.removeEventListener("resize", onScrollOrResize);
-      if (rafId) window.cancelAnimationFrame(rafId);
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -75,8 +46,11 @@ export function HomeScrollHeader() {
           : "-translate-y-full opacity-0 pointer-events-none"
       )}
       aria-hidden={!visible}
+      onTransitionEnd={() => {
+        if (!visible) setMounted(false);
+      }}
     >
-      <PublicHeader variant="solid" />
+      {mounted ? <PublicHeader variant="solid" /> : null}
     </div>
   );
 }
