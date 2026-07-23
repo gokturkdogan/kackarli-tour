@@ -20,38 +20,40 @@ export function RoutePreviews({ tours }: RoutePreviewsProps) {
   const tour = tours[0];
 
   return (
-    <section className="py-24 bg-mist w-full overflow-hidden">
-      <PageContainer>
-        {isSingle ? (
-          <>
-            <AnimateIn className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-              <div className="max-w-xl">
-                <span className="text-forest-500 text-sm font-medium tracking-widest uppercase">
-                  {tourTypeLabel(tour.type)} Tur
-                </span>
-                <h2 className="text-3xl md:text-4xl font-bold text-forest-900 mt-3 mb-3">
-                  {tour.title}
-                </h2>
-                <p className="text-muted-foreground">
-                  {tour.shortDescription ?? tour.description}
-                </p>
-              </div>
-              <Link
-                href={tour.href}
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "border-forest-300 text-forest-700 hover:bg-forest-50 shrink-0"
-                )}
-              >
-                Rotayı İncele
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </AnimateIn>
+    <section className="py-16 sm:py-20 bg-mist w-full overflow-hidden relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(100%,48rem)] h-48 bg-sage-200/25 rounded-full blur-3xl pointer-events-none" />
 
-            <AnimateIn>
-              <RoutePreviewCard tour={tour} />
-            </AnimateIn>
-          </>
+      <PageContainer className="relative">
+        <AnimateIn className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
+          <span className="text-forest-500 text-xs font-medium tracking-widest uppercase">
+            {isSingle ? tourTypeLabel(tour.type) + " Tur" : "Tur Rotalarımız"}
+          </span>
+          <h2 className="text-2xl md:text-3xl font-bold text-forest-900 mt-2 mb-2 leading-tight">
+            {isSingle ? tour.title : "Kaçkarlı Yaylaları Keşfedin"}
+          </h2>
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+            {isSingle
+              ? (tour.shortDescription ?? tour.description)
+              : "Günübirlik ve konaklamalı yayla turlarımızı inceleyin; özenle planlanmış rotalar ve unutulmaz manzaralar."}
+          </p>
+          {isSingle && (
+            <Link
+              href={tour.href}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "sm" }),
+                "mt-5 border-forest-300 text-forest-700 hover:bg-forest-50"
+              )}
+            >
+              Rotayı İncele
+              <ArrowRight className="ml-2 h-3.5 w-3.5" />
+            </Link>
+          )}
+        </AnimateIn>
+
+        {isSingle ? (
+          <AnimateIn>
+            <RoutePreviewCard tour={tour} />
+          </AnimateIn>
         ) : (
           <AnimateIn>
             <TourBannerCarousel tours={tours} />

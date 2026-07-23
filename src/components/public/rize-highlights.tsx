@@ -1,4 +1,5 @@
 import { PageContainer } from "@/components/public/page-container";
+import Image from "next/image";
 import { Cloud, Droplets, Leaf, Mountain } from "lucide-react";
 import { rizeHighlights } from "@/lib/home-data";
 import { AnimateIn } from "@/components/public/animate-in";
@@ -33,6 +34,31 @@ export function RizeHighlights() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {rizeHighlights.map((item, i) => {
             const Icon = iconMap[item.icon as keyof typeof iconMap];
+
+            if ("image" in item && item.image) {
+              return (
+                <AnimateIn key={item.title} delay={i * 100}>
+                  <div className="group relative overflow-hidden rounded-2xl border border-forest-100 hover:border-forest-300 hover:shadow-xl hover:shadow-forest-900/20 transition-all duration-500 hover:-translate-y-1 h-full min-h-[220px]">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover object-[center_10%] transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-forest-900/95 via-forest-900/70 to-forest-900/35" />
+                    <div className="relative flex h-full flex-col justify-end p-6">
+                      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-cream/15 backdrop-blur-sm border border-cream/20">
+                        <Icon className="h-6 w-6 text-cream" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-cream mb-2">{item.title}</h3>
+                      <p className="text-sm text-cream/80 leading-relaxed">{item.description}</p>
+                    </div>
+                  </div>
+                </AnimateIn>
+              );
+            }
+
             return (
               <AnimateIn key={item.title} delay={i * 100}>
                 <div className="group p-6 rounded-2xl bg-white border border-forest-100 hover:border-forest-300 hover:shadow-xl hover:shadow-forest-100/50 transition-all duration-300 hover:-translate-y-1 h-full">

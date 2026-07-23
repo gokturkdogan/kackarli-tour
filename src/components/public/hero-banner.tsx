@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { AnimateIn } from "@/components/public/animate-in";
 import { PageContainer } from "@/components/public/page-container";
 import { PublicHeader } from "@/components/public/public-header";
+import { HOME_HERO_HEADER_ID } from "@/lib/home-hero";
 import { HeroLazyVideo } from "@/components/public/hero-lazy-video";
 import { useHeroVideoTransition } from "@/hooks/use-hero-video-transition";
 import {
@@ -151,7 +152,7 @@ function StaticHero() {
     <>
       <section className="relative min-h-hero-vh bg-background">
         <div className="relative flex min-h-hero-vh items-start lg:items-center">
-          <div className="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-20">
+          <div id={HOME_HERO_HEADER_ID} className="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-20">
             <PublicHeader variant="transparent" position="hero" />
           </div>
 
@@ -278,7 +279,7 @@ function AnimatedHero() {
           className="absolute inset-0"
           style={{ zIndex: 2 }}
         >
-          <div ref={headerRef} className="absolute top-0 left-0 right-0 z-20">
+          <div id={HOME_HERO_HEADER_ID} ref={headerRef} className="absolute top-0 left-0 right-0 z-20">
             <PublicHeader variant="transparent" position="hero" />
           </div>
           <div className="absolute inset-0 flex items-start pt-28 sm:pt-32 lg:items-center lg:pt-0">

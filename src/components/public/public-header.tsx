@@ -11,11 +11,11 @@ import {
   MapPin,
   Menu,
   MessageCircle,
-  Mountain,
   Phone,
   Route,
   X,
 } from "lucide-react";
+import { SiteLogo } from "@/components/public/site-logo";
 import { cn } from "@/lib/utils";
 import { pageContainerClass } from "@/components/public/page-container";
 import { buttonVariants } from "@/components/ui/button";
@@ -65,33 +65,11 @@ export function PublicHeader({
       )}
     >
       <div className={pageContainerClass("h-16 flex items-center justify-between gap-2 min-w-0")}>
-        <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0 shrink">
-          <div
-            className={cn(
-              "flex h-9 w-9 items-center justify-center rounded-lg transition-transform group-hover:scale-105",
-              isTransparent ? "bg-forest-600/80" : "bg-forest-600"
-            )}
-          >
-            <Mountain className="h-4 w-4 text-cream" />
-          </div>
-          <div className="min-w-0">
-            <span
-              className={cn(
-                "text-base sm:text-lg font-semibold leading-none truncate block",
-                isTransparent ? "text-cream" : "text-forest-900"
-              )}
-            >
-              Kaçkarlı Tur
-            </span>
-            <span
-              className={cn(
-                "text-[10px] tracking-widest uppercase hidden sm:block truncate",
-                isTransparent ? "text-cream/60" : "text-forest-500"
-              )}
-            >
-              Rize · Günübirlik Tur
-            </span>
-          </div>
+        <Link
+          href="/"
+          className="group flex min-w-0 shrink items-center bg-transparent transition-transform hover:scale-[1.02]"
+        >
+          <SiteLogo priority onDark={isTransparent || isHero} />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
@@ -151,19 +129,9 @@ export function PublicHeader({
                   <Link
                     href="/"
                     onClick={closeMenu}
-                    className="flex items-center gap-3 min-w-0 group"
+                    className="group flex min-w-0 items-center transition-transform hover:scale-[1.02]"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-forest-600 shadow-lg shadow-forest-950/30 ring-1 ring-cream/10 transition-transform group-hover:scale-105">
-                      <Mountain className="h-5 w-5 text-cream" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-lg font-bold text-cream leading-tight truncate">
-                        Kaçkarlı Tur
-                      </p>
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-sage-300/90 mt-1">
-                        Rize · Günübirlik Tur
-                      </p>
-                    </div>
+                    <SiteLogo className="h-12" onDark />
                   </Link>
 
                   <button

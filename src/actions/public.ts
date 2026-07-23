@@ -25,6 +25,12 @@ export async function getFeaturedTours(limit = 3) {
   });
 }
 
+export async function getActiveDayTripTourCount(): Promise<number> {
+  return prisma.tour.count({
+    where: { isActive: true, type: "DAY_TRIP" },
+  });
+}
+
 export async function getActivePublicTours(): Promise<PublicTour[]> {
   const tours = await prisma.tour.findMany({
     where: { isActive: true },

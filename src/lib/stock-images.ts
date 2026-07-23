@@ -14,6 +14,22 @@ const STOCK_PHOTOS = {
   naturePanorama: "photo-1469474968028-56623f02e42e",
 } as const;
 
+/** Muhlama / yerel kültür — Cloudinary */
+export const LOCAL_CULTURE_IMAGE =
+  "https://res.cloudinary.com/housrfzh/image/upload/v1784814501/image_tdpnpo.png";
+
+/** Şelale & vadi — Cloudinary */
+export const WATERFALL_VALLEY_IMAGE =
+  "https://res.cloudinary.com/housrfzh/image/upload/v1784815269/image_srqqa5.png";
+
+/** Kaçkar manzarası — Cloudinary */
+export const KACKAR_VIEW_IMAGE =
+  "https://res.cloudinary.com/housrfzh/image/upload/v1784815328/image_wqsiss.png";
+
+/** Yayla atmosferi — Cloudinary */
+export const YAYLA_ATMOSPHERE_IMAGE =
+  "https://res.cloudinary.com/housrfzh/image/upload/v1784815365/image_tc0rhu.png";
+
 export type StockPhotoKey = keyof typeof STOCK_PHOTOS;
 
 export function stockImage(
