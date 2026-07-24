@@ -80,7 +80,7 @@ export function AboutStory({ settings }: AboutStoryProps) {
                 href="/turlar"
                 className={cn(
                   buttonVariants({ size: "lg" }),
-                  "mt-6 sm:mt-8 w-full sm:w-auto justify-center group bg-gradient-to-r from-sage-500 to-sage-400 hover:from-sage-400 hover:to-sage-300 text-forest-900 font-bold shadow-lg shadow-sage-500/20"
+                  "mt-6 sm:mt-8 w-full sm:w-auto justify-center group bg-gradient-to-r from-sage-500 to-sage-400 hover:from-sage-400 hover:to-sage-300 text-white font-bold shadow-lg shadow-sage-500/20"
                 )}
               >
                 Tur Rotamızı Keşfedin

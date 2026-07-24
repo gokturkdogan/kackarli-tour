@@ -96,7 +96,7 @@ export function PublicHeader({
               buttonVariants({ size: "sm" }),
               "hidden sm:inline-flex",
               isTransparent
-                ? "bg-sage-500 hover:bg-sage-400 text-forest-900"
+                ? "bg-sage-500 hover:bg-sage-400 text-white"
                 : "bg-forest-600 hover:bg-forest-700 text-cream"
             )}
           >
@@ -188,17 +188,6 @@ export function PublicHeader({
                     );
                   })}
                 </ul>
-
-                <div className="mt-5 px-2">
-                  <Link
-                    href="/rezervasyon"
-                    onClick={closeMenu}
-                    className="flex items-center justify-between rounded-xl border border-forest-100 bg-forest-50/70 px-4 py-3 text-sm font-medium text-forest-800 hover:bg-forest-50 transition-colors"
-                  >
-                    <span>Rezervasyon yap</span>
-                    <ArrowRight className="h-4 w-4 text-forest-500" />
-                  </Link>
-                </div>
               </nav>
 
               {/* Footer */}
@@ -226,7 +215,7 @@ export function PublicHeader({
                 <Link
                   href="/turlar"
                   onClick={closeMenu}
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sage-500 to-sage-400 px-5 py-3.5 text-base font-bold text-forest-900 shadow-lg shadow-sage-500/25 transition-all hover:from-sage-400 hover:to-sage-300 active:scale-[0.98]"
+                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sage-500 to-sage-400 px-5 py-3.5 text-base font-bold text-white shadow-lg shadow-sage-500/25 transition-all hover:from-sage-400 hover:to-sage-300 active:scale-[0.98]"
                 >
                   Tura Katıl
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

@@ -8,7 +8,6 @@ import { RegionFacts } from "@/components/public/about/region-facts";
 import { ValuesGrid } from "@/components/public/about/values-grid";
 import { BentoFeatures } from "@/components/public/about/bento-features";
 import { TimelineSection } from "@/components/public/about/timeline-section";
-import { TeamSection } from "@/components/public/about/team-section";
 import { MissionVision } from "@/components/public/about/mission-vision";
 import { getSiteSettings } from "@/lib/site-settings";
 
@@ -38,7 +37,6 @@ export default async function AboutPage() {
         <ValuesGrid />
         <BentoFeatures />
         <TimelineSection />
-        <TeamSection />
         <MissionVision />
       </main>
       <PublicFooter />

@@ -126,7 +126,7 @@ function EditorialCopy() {
           href="/turlar"
           className={cn(
             buttonVariants({ size: "lg" }),
-            "justify-center bg-sage-500 hover:bg-sage-400 text-forest-900 shadow-lg shadow-sage-500/20 hover:shadow-sage-400/30 transition-all hover:-translate-y-0.5"
+            "justify-center bg-sage-500 hover:bg-sage-400 text-white shadow-lg shadow-sage-500/20 hover:shadow-sage-400/30 transition-all hover:-translate-y-0.5"
           )}
         >
           Rotaları Keşfet

@@ -27,18 +27,18 @@ export function CtaSection() {
             Yaylalar Sizi Bekliyor
           </h2>
           <p className="text-cream/70 text-lg mb-10 max-w-xl mx-auto">
-            Hayalinizdeki Rize turunu planlayalım. WhatsApp üzerinden hızlıca
-            bilgi alın veya online rezervasyon talebi oluşturun.
+            Hayalinizdeki Rize turunu planlayalım. Turlarımıza göz atın veya WhatsApp
+            üzerinden hızlıca bilgi alın.
           </p>
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
             <Link
-              href="/rezervasyon"
+              href="/turlar"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "w-full sm:w-auto justify-center bg-sage-500 hover:bg-sage-400 text-forest-900 shadow-lg"
+                "w-full sm:w-auto justify-center bg-sage-500 hover:bg-sage-400 text-white shadow-lg"
               )}
             >
-              Rezervasyon Yap
+              Turları Gör
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
             <Link
