@@ -9,7 +9,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getWhatsAppUrl, type SiteSettings } from "@/lib/site-settings";
+import { formatTelHref, getWhatsAppUrl, type SiteSettings } from "@/lib/site-settings";
 import { AnimateIn } from "@/components/public/animate-in";
 
 interface ContactInfoPanelProps {
@@ -29,12 +29,12 @@ export function ContactInfoPanel({ settings }: ContactInfoPanelProps) {
       value: settings.contactAddress,
       href: null,
     },
-    {
+    ...settings.contactPhones.map((phone) => ({
       icon: Phone,
-      title: "Telefon",
-      value: settings.contactPhone,
-      href: `tel:${settings.contactPhone.replace(/\s/g, "")}`,
-    },
+      title: phone.label,
+      value: phone.number,
+      href: formatTelHref(phone.number),
+    })),
     {
       icon: Mail,
       title: "E-posta",
@@ -44,7 +44,7 @@ export function ContactInfoPanel({ settings }: ContactInfoPanelProps) {
     {
       icon: Clock,
       title: "Çalışma Saatleri",
-      value: "Pazartesi – Cumartesi: 09:00 – 19:00",
+      value: settings.workingHours,
       href: null,
     },
   ];
@@ -65,7 +65,7 @@ export function ContactInfoPanel({ settings }: ContactInfoPanelProps) {
 
       <div className="space-y-4">
         {items.map((item, i) => (
-          <AnimateIn key={item.title} delay={i * 80}>
+          <AnimateIn key={`${item.title}-${item.value}`} delay={i * 80}>
             <Card className="border-forest-100 hover:border-forest-200 transition-colors">
               <CardContent className="flex items-start gap-4 p-5">
                 <div className="w-10 h-10 rounded-xl bg-forest-50 flex items-center justify-center shrink-0">

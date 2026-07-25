@@ -210,7 +210,12 @@ async function main() {
     { key: "whatsapp_number", value: "905551234567" },
     { key: "contact_email", value: "info@kackarlitur.com" },
     { key: "contact_phone", value: "+90 555 123 45 67" },
+    {
+      key: "contact_phones",
+      value: JSON.stringify([{ label: "Rezervasyon", number: "+90 555 123 45 67" }]),
+    },
     { key: "contact_address", value: "Rize, Türkiye" },
+    { key: "working_hours", value: "Pazartesi – Cumartesi: 09:00 – 19:00" },
   ];
 
   for (const setting of settings) {

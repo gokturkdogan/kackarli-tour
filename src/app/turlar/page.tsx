@@ -4,7 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, BedDouble, Clock, Sun } from "lucide-react";
 import { getActivePublicTours } from "@/actions/public";
-import { PublicHeader } from "@/components/public/public-header";
+import { PublicHeaderShell } from "@/components/public/public-header-shell";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PageHero } from "@/components/public/page-hero";
 import { PageContainer } from "@/components/public/page-container";
@@ -26,7 +26,7 @@ export default async function ToursPage() {
   if (tours.length === 0) {
     return (
       <>
-        <PublicHeader variant="solid" />
+        <PublicHeaderShell variant="solid" />
         <main className="bg-cream min-h-screen">
           <PageContainer className="py-24 text-center">
             <h1 className="text-2xl font-bold text-forest-900 mb-2">Henüz tur yok</h1>
@@ -44,7 +44,7 @@ export default async function ToursPage() {
 
   return (
     <>
-      <PublicHeader variant="solid" />
+      <PublicHeaderShell variant="solid" />
       <main className="bg-cream min-h-screen overflow-x-hidden w-full max-w-full">
         <PageHero
           title="Turlarımız"

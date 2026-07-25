@@ -6,7 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AnimateIn } from "@/components/public/animate-in";
 import { stockImage } from "@/lib/stock-images";
-import type { SiteSettings } from "@/lib/site-settings";
+import type { SiteSettings } from "@/lib/site-settings.shared";
 
 interface AboutStoryProps {
   settings: SiteSettings;

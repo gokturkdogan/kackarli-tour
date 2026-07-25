@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { stockImage } from "@/lib/stock-images";
 import { tourTypeLabel } from "@/lib/utils-helpers";
-import { PublicHeader } from "@/components/public/public-header";
+import { PublicHeaderShell } from "@/components/public/public-header-shell";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PageHero } from "@/components/public/page-hero";
 import { ReservationForm } from "@/components/public/reservation-form";
@@ -61,7 +61,7 @@ export default async function ReservationPage({ searchParams }: ReservationPageP
 
   return (
     <>
-      <PublicHeader variant="solid" />
+      <PublicHeaderShell variant="solid" />
       <main className="bg-cream min-h-screen overflow-x-hidden w-full max-w-full">
         <PageHero
           title={heroTitle}

@@ -24,7 +24,7 @@ export default async function AboutPage() {
 
   return (
     <>
-      <PublicHeader variant="solid" />
+      <PublicHeader variant="solid" settings={settings} />
       <main className="bg-cream min-h-screen overflow-x-hidden w-full max-w-full">
         <PageHero
           title="Hakkımızda"

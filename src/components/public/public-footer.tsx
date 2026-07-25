@@ -1,8 +1,11 @@
 import { PageContainer } from "@/components/public/page-container";
 import Link from "next/link";
 import { Mountain, Phone, Mail, MapPin } from "lucide-react";
+import { formatTelHref, getSiteSettings } from "@/lib/site-settings";
 
-export function PublicFooter() {
+export async function PublicFooter() {
+  const settings = await getSiteSettings();
+
   return (
     <footer className="bg-forest-900 text-cream/70 w-full overflow-hidden">
       <PageContainer className="py-12 sm:py-16">
@@ -12,12 +15,9 @@ export function PublicFooter() {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-forest-600">
                 <Mountain className="h-5 w-5 text-cream" />
               </div>
-              <span className="text-lg font-semibold text-cream">Kaçkarlı Tur</span>
+              <span className="text-lg font-semibold text-cream">{settings.siteName}</span>
             </Link>
-            <p className="text-sm leading-relaxed text-cream/60">
-              Rize ve Kaçkar Dağları&apos;nda günübirlik yayla turu. Fırtına Vadisi&apos;nden
-              Pokut ve Sal&apos;a uzanan özel rotamızla doğanın kalbinde unutulmaz bir gün.
-            </p>
+            <p className="text-sm leading-relaxed text-cream/60">{settings.siteDescription}</p>
           </div>
 
           <div>
@@ -68,22 +68,33 @@ export function PublicFooter() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-sage-400 shrink-0" />
-                Rize, Türkiye
+                {settings.contactAddress}
               </li>
-              <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-sage-400 shrink-0" />
-                +90 555 123 45 67
-              </li>
+              {settings.contactPhones.map((phone) => (
+                <li key={`${phone.label}-${phone.number}`} className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-sage-400 shrink-0" />
+                  <a href={formatTelHref(phone.number)} className="hover:text-cream transition-colors">
+                    {phone.number}
+                  </a>
+                </li>
+              ))}
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-sage-400 shrink-0" />
-                info@kackarlitur.com
+                <a
+                  href={`mailto:${settings.contactEmail}`}
+                  className="hover:text-cream transition-colors"
+                >
+                  {settings.contactEmail}
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 pt-8 border-t border-cream/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-cream/50">
-          <p>&copy; {new Date().getFullYear()} Kaçkarlı Tur. Tüm hakları saklıdır.</p>
+          <p>
+            &copy; {new Date().getFullYear()} {settings.siteName}. Tüm hakları saklıdır.
+          </p>
           <p>Karadeniz&apos;in kalbinde, yaylaların büyüsünde.</p>
         </div>
       </PageContainer>

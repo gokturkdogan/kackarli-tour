@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { AnimateIn } from "@/components/public/animate-in";
 import { PageContainer } from "@/components/public/page-container";
 import { PublicHeader } from "@/components/public/public-header";
+import { defaultSiteSettings, type SiteSettings } from "@/lib/site-settings.shared";
 import { HOME_HERO_HEADER_ID } from "@/lib/home-hero";
 import { HeroLazyVideo } from "@/components/public/hero-lazy-video";
 import { useHeroVideoTransition } from "@/hooks/use-hero-video-transition";
@@ -147,13 +148,13 @@ function ScrollHint() {
 }
 
 /** Static / reduced-motion / no-WebGL variant: hero + normal-flow editorial section. */
-function StaticHero() {
+function StaticHero({ settings }: { settings: SiteSettings }) {
   return (
     <>
       <section className="relative min-h-hero-vh bg-background">
         <div className="relative flex min-h-hero-vh items-start lg:items-center">
           <div id={HOME_HERO_HEADER_ID} className="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-20">
-            <PublicHeader variant="transparent" position="hero" />
+            <PublicHeader variant="transparent" position="hero" settings={settings} />
           </div>
 
           <div className="absolute inset-0 overflow-hidden">
@@ -202,7 +203,7 @@ function StaticHero() {
 }
 
 /** Animated variant: pinned WebGL video transition (hero → left editorial card). */
-function AnimatedHero() {
+function AnimatedHero({ settings }: { settings: SiteSettings }) {
   const sources = useMemo(() => getHeroVideoSources(), []);
   const {
     sectionRef,
@@ -280,7 +281,7 @@ function AnimatedHero() {
           style={{ zIndex: 2 }}
         >
           <div id={HOME_HERO_HEADER_ID} ref={headerRef} className="absolute top-0 left-0 right-0 z-20">
-            <PublicHeader variant="transparent" position="hero" />
+            <PublicHeader variant="transparent" position="hero" settings={settings} />
           </div>
           <div className="absolute inset-0 flex items-start pt-28 sm:pt-32 lg:items-center lg:pt-0">
             <PageContainer className="relative pb-20 lg:py-24">
@@ -294,12 +295,12 @@ function AnimatedHero() {
   );
 }
 
-export function HeroBanner() {
+export function HeroBanner({ settings = defaultSiteSettings }: { settings?: SiteSettings }) {
   const animated = useSyncExternalStore(
     subscribeMotion,
     getAnimatedSnapshot,
     getAnimatedServerSnapshot
   );
 
-  return animated ? <AnimatedHero /> : <StaticHero />;
+  return animated ? <AnimatedHero settings={settings} /> : <StaticHero settings={settings} />;
 }

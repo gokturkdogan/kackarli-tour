@@ -16,6 +16,11 @@ import {
   X,
 } from "lucide-react";
 import { SiteLogo } from "@/components/public/site-logo";
+import {
+  defaultSiteSettings,
+  formatTelHref,
+  type SiteSettings,
+} from "@/lib/site-settings.shared";
 import { cn } from "@/lib/utils";
 import { pageContainerClass } from "@/components/public/page-container";
 import { buttonVariants } from "@/components/ui/button";
@@ -33,15 +38,17 @@ const navLinks = [
   { href: "/iletisim", label: "İletişim", icon: MessageCircle },
 ] as const;
 
-interface PublicHeaderProps {
+export interface PublicHeaderProps {
   variant?: "transparent" | "solid";
   /** `hero` = absolute inside hero frame, scrolls away with content. */
   position?: "fixed" | "hero";
+  settings?: SiteSettings;
 }
 
 export function PublicHeader({
   variant = "transparent",
   position = "fixed",
+  settings = defaultSiteSettings,
 }: PublicHeaderProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -145,7 +152,7 @@ export function PublicHeader({
                 </div>
 
                 <p className="relative mt-4 text-sm text-cream/65 leading-relaxed max-w-[240px]">
-                  Fırtına Vadisi&apos;nden Pokut ve Sal&apos;a uzanan yayla rotası.
+                  {settings.siteDescription}
                 </p>
               </div>
 
@@ -199,15 +206,24 @@ export function PublicHeader({
                   <ul className="space-y-2 text-sm text-forest-700">
                     <li className="flex items-center gap-2.5">
                       <MapPin className="h-4 w-4 shrink-0 text-sage-600" />
-                      Rize, Türkiye
+                      {settings.contactAddress}
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <Phone className="h-4 w-4 shrink-0 text-sage-600" />
-                      +90 555 123 45 67
-                    </li>
+                    {settings.contactPhones.map((phone) => (
+                      <li key={`${phone.label}-${phone.number}`} className="flex items-center gap-2.5">
+                        <Phone className="h-4 w-4 shrink-0 text-sage-600" />
+                        <a href={formatTelHref(phone.number)} className="hover:text-forest-900">
+                          {phone.number}
+                        </a>
+                      </li>
+                    ))}
                     <li className="flex items-center gap-2.5 min-w-0">
                       <Mail className="h-4 w-4 shrink-0 text-sage-600" />
-                      <span className="truncate">info@kackarlitur.com</span>
+                      <a
+                        href={`mailto:${settings.contactEmail}`}
+                        className="truncate hover:text-forest-900"
+                      >
+                        {settings.contactEmail}
+                      </a>
                     </li>
                   </ul>
                 </div>
@@ -222,7 +238,7 @@ export function PublicHeader({
                 </Link>
 
                 <p className="text-center text-[10px] text-forest-500/80 leading-relaxed">
-                  © {new Date().getFullYear()} Kaçkarlı Tur
+                  © {new Date().getFullYear()} {settings.siteName}
                 </p>
               </div>
             </SheetContent>

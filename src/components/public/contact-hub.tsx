@@ -12,7 +12,7 @@ import {
 import { PageContainer } from "@/components/public/page-container";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getWhatsAppUrl, type SiteSettings } from "@/lib/site-settings";
+import { formatTelHref, getWhatsAppUrl, type SiteSettings } from "@/lib/site-settings";
 import { AnimateIn } from "@/components/public/animate-in";
 import { stockImage } from "@/lib/stock-images";
 
@@ -27,15 +27,15 @@ export function ContactHub({ settings }: ContactHubProps) {
   );
 
   const contactCards = [
-    {
+    ...settings.contactPhones.map((phone) => ({
       icon: Phone,
-      label: "Telefon",
-      value: settings.contactPhone,
-      href: `tel:${settings.contactPhone.replace(/\s/g, "")}`,
+      label: phone.label,
+      value: phone.number,
+      href: formatTelHref(phone.number),
       accent: "from-sage-50 to-forest-50 border-sage-200/80",
       iconBg: "bg-sage-100 text-sage-700",
       action: "Ara",
-    },
+    })),
     {
       icon: Mail,
       label: "E-posta",
@@ -57,7 +57,7 @@ export function ContactHub({ settings }: ContactHubProps) {
     {
       icon: Clock,
       label: "Çalışma Saatleri",
-      value: "Pzt – Cmt · 09:00 – 19:00",
+      value: settings.workingHours,
       href: null,
       accent: "from-mist to-white border-forest-100",
       iconBg: "bg-forest-50 text-forest-600",
@@ -166,7 +166,7 @@ export function ContactHub({ settings }: ContactHubProps) {
               );
 
               return (
-                <AnimateIn key={card.label} delay={i * 60}>
+                <AnimateIn key={`${card.label}-${card.value}`} delay={i * 60}>
                   {card.href ? (
                     <Link href={card.href} className="block">
                       {content}
