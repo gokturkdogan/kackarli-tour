@@ -1,13 +1,13 @@
 "use client";
 
-import { useSyncExternalStore, useMemo } from "react";
+import { useEffect, useSyncExternalStore, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Phone, Star } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AnimateIn } from "@/components/public/animate-in";
 import { PageContainer } from "@/components/public/page-container";
+import { HERO_COPY, HERO_SHELL_ID } from "@/lib/hero-copy";
 import { PublicHeader } from "@/components/public/public-header";
 import { defaultSiteSettings, type SiteSettings } from "@/lib/site-settings.shared";
 import { HOME_HERO_HEADER_ID } from "@/lib/home-hero";
@@ -55,50 +55,41 @@ function getAnimatedServerSnapshot() {
 }
 
 const heroGlassPrimary =
-  "group inline-flex h-10 sm:h-11 flex-1 sm:flex-none min-w-0 items-center justify-center gap-1.5 rounded-full px-4 sm:px-6 text-[13px] sm:text-sm font-medium tracking-wide text-cream/95 border border-white/22 bg-sage-300/12 backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.28)] transition-[background-color,border-color,box-shadow,transform] duration-200 hover:bg-sage-300/20 hover:border-white/32 active:scale-[0.99]";
+  "group inline-flex h-10 sm:h-11 flex-1 sm:flex-none min-w-0 items-center justify-center gap-1.5 rounded-full px-4 sm:px-6 text-[13px] sm:text-sm font-medium tracking-wide text-cream/95 border border-white/22 bg-sage-300/20 sm:bg-sage-300/12 sm:backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.28)] transition-[background-color,border-color,box-shadow,transform] duration-200 hover:bg-sage-300/20 hover:border-white/32 active:scale-[0.99]";
 
 const heroGlassSecondary =
-  "group inline-flex h-10 sm:h-11 flex-1 sm:flex-none min-w-0 items-center justify-center gap-1.5 rounded-full px-4 sm:px-6 text-[13px] sm:text-sm font-medium tracking-wide text-cream/88 border border-white/16 bg-white/[0.07] backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22)] transition-[background-color,border-color,box-shadow,transform] duration-200 hover:bg-white/11 hover:border-white/26 active:scale-[0.99]";
+  "group inline-flex h-10 sm:h-11 flex-1 sm:flex-none min-w-0 items-center justify-center gap-1.5 rounded-full px-4 sm:px-6 text-[13px] sm:text-sm font-medium tracking-wide text-cream/88 border border-white/16 bg-white/12 sm:bg-white/[0.07] sm:backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22)] transition-[background-color,border-color,box-shadow,transform] duration-200 hover:bg-white/11 hover:border-white/26 active:scale-[0.99]";
 
 /** Existing hero copy — preserved verbatim from the original hero. */
 function HeroCopy() {
   return (
     <div className="max-w-3xl lg:max-w-4xl min-w-0">
-      <AnimateIn delay={100}>
-        <div className="inline-flex flex-wrap items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-cream/10 border border-cream/20 backdrop-blur-sm mb-6 lg:mb-8 max-w-full">
-          <Star className="h-3.5 w-3.5 text-sage-300 fill-sage-300 shrink-0" />
-          <span className="text-cream/90 text-[10px] sm:text-xs font-medium tracking-wide uppercase">
-            Yayla Turu Rize
-          </span>
-        </div>
-      </AnimateIn>
+      <div className="inline-flex flex-wrap items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-cream/10 border border-cream/20 sm:backdrop-blur-sm mb-6 lg:mb-8 max-w-full">
+        <Star className="h-3.5 w-3.5 text-sage-300 fill-sage-300 shrink-0" />
+        <span className="text-cream/90 text-[10px] sm:text-xs font-medium tracking-wide uppercase">
+          {HERO_COPY.badge}
+        </span>
+      </div>
 
-      <AnimateIn delay={200}>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-cream leading-[1.1] mb-6 lg:mb-8 break-words">
-          Sisli Yaylaların
-          <span className="block text-sage-300 mt-1 lg:mt-2">Büyülü Dünyası</span>
-        </h1>
-      </AnimateIn>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-cream leading-[1.1] mb-6 lg:mb-8 break-words">
+        {HERO_COPY.title}
+        <span className="block text-sage-300 mt-1 lg:mt-2">{HERO_COPY.titleAccent}</span>
+      </h1>
 
-      <AnimateIn delay={350}>
-        <p className="text-lg md:text-xl lg:text-2xl text-cream/75 mb-8 lg:mb-10 max-w-xl lg:max-w-2xl leading-relaxed">
-          Fırtına Vadisi&apos;nden Ayder&apos;e, Pokut ve Sal yaylalarına Rize&apos;nin en
-          güzel güzergâhını tek günde, profesyonel rehberlikle keşfedin.
-        </p>
-      </AnimateIn>
+      <p className="text-lg md:text-xl lg:text-2xl text-cream/75 mb-8 lg:mb-10 max-w-xl lg:max-w-2xl leading-relaxed">
+        {HERO_COPY.description}
+      </p>
 
-      <AnimateIn delay={500}>
-        <div className="flex w-full gap-2 sm:w-auto sm:gap-3">
-          <Link href="/turlar" className={cn(heroGlassPrimary)}>
-            <span className="truncate">Turu İncele</span>
-            <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 opacity-80 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-          <Link href="/iletisim" className={cn(heroGlassSecondary)}>
-            <Phone className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 opacity-80" />
-            <span className="truncate">Bize Ulaşın</span>
-          </Link>
-        </div>
-      </AnimateIn>
+      <div className="flex w-full gap-2 sm:w-auto sm:gap-3">
+        <Link href="/turlar" className={cn(heroGlassPrimary)}>
+          <span className="truncate">{HERO_COPY.ctaPrimary}</span>
+          <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 opacity-80 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+        <Link href="/iletisim" className={cn(heroGlassSecondary)}>
+          <Phone className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 opacity-80" />
+          <span className="truncate">{HERO_COPY.ctaSecondary}</span>
+        </Link>
+      </div>
     </div>
   );
 }
@@ -185,12 +176,11 @@ function StaticHero({ settings }: { settings: SiteSettings }) {
             <div className="relative w-full h-[40vh] lg:h-[62vh] rounded-[20px] lg:rounded-[28px] overflow-hidden bg-forest-800">
               <Image
                 src={HERO_POSTER_SRC}
-                alt=""
+                alt="Rize yayla manzarası"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <HeroLazyVideo className="absolute inset-0 h-full w-full object-cover" />
             </div>
             <div className="flex flex-col gap-5 lg:gap-6">
               <EditorialCopy />
@@ -296,11 +286,20 @@ function AnimatedHero({ settings }: { settings: SiteSettings }) {
 }
 
 export function HeroBanner({ settings = defaultSiteSettings }: { settings?: SiteSettings }) {
+  const [mounted, setMounted] = useState(false);
   const animated = useSyncExternalStore(
     subscribeMotion,
     getAnimatedSnapshot,
     getAnimatedServerSnapshot
   );
+
+  useEffect(() => {
+    setMounted(true);
+    const shell = document.getElementById(HERO_SHELL_ID);
+    if (shell) shell.hidden = true;
+  }, []);
+
+  if (!mounted) return null;
 
   return animated ? <AnimatedHero settings={settings} /> : <StaticHero settings={settings} />;
 }

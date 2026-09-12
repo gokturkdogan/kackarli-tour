@@ -13,7 +13,7 @@ export function PageHero({
   title,
   subtitle,
   description,
-  image = stockImage("mistyValley", 1920),
+  image = stockImage("mistyValley", 1200),
 }: PageHeroProps) {
   return (
     <section className="relative pt-16 pb-12 sm:pb-20 md:pb-28 overflow-hidden w-full max-w-full">

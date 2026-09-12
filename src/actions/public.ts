@@ -1,3 +1,5 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { parseMultilineList } from "@/lib/tour-mapper";
 import { resolveAdultPrice, resolveChildPrice } from "@/lib/pricing";
@@ -9,6 +11,27 @@ import type { PublicTour, PublicTourReservationOption } from "@/lib/tour-types";
 const tourInclude = {
   itinerary: { orderBy: [{ sortOrder: "asc" as const }, { dayNumber: "asc" as const }] },
 };
+
+const loadActivePublicTours = unstable_cache(
+  async () => {
+    const tours = await prisma.tour.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+      include: tourInclude,
+    });
+
+    return tours.map(mapTourToPublic);
+  },
+  ["active-public-tours"],
+  { revalidate: 300 }
+);
+
+export const getActivePublicTours = cache(() => loadActivePublicTours());
+
+export async function getActiveDayTripTourCount(): Promise<number> {
+  const tours = await getActivePublicTours();
+  return tours.filter((tour) => tour.type === "DAY_TRIP").length;
+}
 
 export async function getFeaturedTours(limit = 3) {
   return prisma.tour.findMany({
@@ -25,39 +48,29 @@ export async function getFeaturedTours(limit = 3) {
   });
 }
 
-export async function getActiveDayTripTourCount(): Promise<number> {
-  return prisma.tour.count({
-    where: { isActive: true, type: "DAY_TRIP" },
-  });
-}
+export const getPublicTourBySlug = cache(async (slug: string): Promise<PublicTour | null> => {
+  return unstable_cache(
+    async () => {
+      const tour = await prisma.tour.findFirst({
+        where: { slug, isActive: true },
+        include: tourInclude,
+      });
 
-export async function getActivePublicTours(): Promise<PublicTour[]> {
-  const tours = await prisma.tour.findMany({
-    where: { isActive: true },
-    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-    include: tourInclude,
-  });
-
-  return tours.map(mapTourToPublic);
-}
-
-export async function getPublicTourBySlug(slug: string): Promise<PublicTour | null> {
-  const tour = await prisma.tour.findFirst({
-    where: { slug, isActive: true },
-    include: tourInclude,
-  });
-
-  return tour ? mapTourToPublic(tour) : null;
-}
+      return tour ? mapTourToPublic(tour) : null;
+    },
+    ["public-tour", slug],
+    { revalidate: 300 }
+  )();
+});
 
 export async function getPrimaryPublicTour(): Promise<PublicTour | null> {
-  const tour = await prisma.tour.findFirst({
-    where: { isActive: true },
-    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-    include: tourInclude,
-  });
+  const tours = await getActivePublicTours();
+  return tours[0] ?? null;
+}
 
-  return tour ? mapTourToPublic(tour) : null;
+export async function getActiveTourSlugs(): Promise<string[]> {
+  const tours = await getActivePublicTours();
+  return tours.map((tour) => tour.slug);
 }
 
 export async function getToursForReservation(): Promise<PublicTourReservationOption[]> {

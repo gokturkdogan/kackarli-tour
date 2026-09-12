@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   ArrowRight,
-  ImageIcon,
+  BookOpen,
   Info,
   Mail,
   MapPin,
@@ -33,7 +33,7 @@ import {
 
 const navLinks = [
   { href: "/turlar", label: "Tur Rotası", icon: Route },
-  { href: "/galeri", label: "Galeri", icon: ImageIcon },
+  { href: "/rehberlerimiz", label: "Rehberlerimiz", icon: BookOpen },
   { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
   { href: "/iletisim", label: "İletişim", icon: MessageCircle },
 ] as const;
@@ -76,7 +76,7 @@ export function PublicHeader({
           href="/"
           className="group flex min-w-0 shrink items-center bg-transparent transition-transform hover:scale-[1.02]"
         >
-          <SiteLogo priority onDark={isTransparent || isHero} />
+          <SiteLogo onDark={isTransparent || isHero} />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">

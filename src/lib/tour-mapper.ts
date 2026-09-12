@@ -45,7 +45,7 @@ export function mapTourToPublic(tour: TourWithItinerary): PublicTour {
       type: mapItineraryStopType(item.stopType),
       description: item.description,
       duration: item.duration ?? undefined,
-      image: resolveStockImageUrl(item.imageUrl),
+      image: resolveStockImageUrl(item.imageUrl, 800),
       featured: item.isFeatured,
     }));
 

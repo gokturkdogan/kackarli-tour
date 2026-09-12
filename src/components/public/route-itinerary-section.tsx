@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage } from "@/components/public/safe-image";
 import { PageContainer } from "@/components/public/page-container";
 import {
   Bus,
@@ -108,11 +108,12 @@ function StopImage({
         stop.featured ? "min-h-[220px] sm:min-h-[280px] lg:min-h-[320px]" : "min-h-[180px] sm:min-h-[220px]"
       )}
     >
-      <Image
-        src={stop.image}
+      <SafeImage
+        src={stop.image ?? ""}
         alt={stop.name}
         fill
         priority={priority}
+        loading={priority ? undefined : "lazy"}
         className="object-cover transition-transform duration-700 group-hover:scale-105"
         sizes="(max-width: 768px) 100vw, 45vw"
       />
@@ -186,7 +187,7 @@ export function RouteItinerarySection({ tour }: RouteItinerarySectionProps) {
                   >
                     {stop.image && (
                       <div className="relative w-9 h-9 rounded-lg overflow-hidden shrink-0 ring-1 ring-forest-600">
-                        <Image
+                        <SafeImage
                           src={stop.image}
                           alt=""
                           fill
@@ -225,7 +226,7 @@ export function RouteItinerarySection({ tour }: RouteItinerarySectionProps) {
                   )}
                 >
                   {stop.image && (
-                    <Image
+                    <SafeImage
                       src={stop.image}
                       alt={stop.name}
                       fill

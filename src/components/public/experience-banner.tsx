@@ -15,6 +15,7 @@ export function ExperienceBanner() {
                   src={stockImage("lakeReflection", 900)}
                   alt="Rize çay tarlaları ve vadi"
                   fill
+                  loading="lazy"
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />

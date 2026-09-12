@@ -1,18 +1,19 @@
-import type { Metadata } from "next";
 import { stockImage } from "@/lib/stock-images";
+import { buildPageMetadata } from "@/lib/seo";
 import { tourTypeLabel } from "@/lib/utils-helpers";
 import { PublicHeaderShell } from "@/components/public/public-header-shell";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PageHero } from "@/components/public/page-hero";
-import { ReservationForm } from "@/components/public/reservation-form";
+import { ReservationFormLoader } from "@/components/public/reservation-form-loader";
 import { ReservationTourUnavailable } from "@/components/public/reservation-tour-unavailable";
 import { ReservationGenericUnavailable } from "@/components/public/reservation-generic-unavailable";
 import { getPublicTourBySlug, getToursForReservation } from "@/actions/public";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "Rezervasyon",
   description: "Kaçkarlı Tur yayla turları için online rezervasyon talebi oluşturun.",
-};
+  path: "/rezervasyon",
+});
 
 export const dynamic = "force-dynamic";
 
@@ -70,7 +71,7 @@ export default async function ReservationPage({ searchParams }: ReservationPageP
           image={heroImage}
         />
         {canBook ? (
-          <ReservationForm
+          <ReservationFormLoader
             tours={tours}
             initialTourSlug={tur}
             initialScheduleId={tarih}

@@ -6,6 +6,7 @@ import {
   HERO_POSTER_SRC,
   scheduleIdleWork,
   shouldLoadHeroVideo,
+  waitForLcp,
   type HeroVideoSources,
 } from "@/lib/hero-video";
 import { cn } from "@/lib/utils";
@@ -15,16 +16,12 @@ interface HeroLazyVideoProps {
   autoPlay?: boolean;
 }
 
-function attachVideoSources(video: HTMLVideoElement, sources: HeroVideoSources) {
+function attachVideoSource(video: HTMLVideoElement, sources: HeroVideoSources) {
   video.replaceChildren();
   const mp4 = document.createElement("source");
   mp4.src = sources.mp4;
   mp4.type = "video/mp4";
-  const webm = document.createElement("source");
-  webm.src = sources.webm;
-  webm.type = "video/webm";
   video.appendChild(mp4);
-  video.appendChild(webm);
 }
 
 export function HeroLazyVideo({ className, autoPlay = true }: HeroLazyVideoProps) {
@@ -36,22 +33,28 @@ export function HeroLazyVideo({ className, autoPlay = true }: HeroLazyVideoProps
     const video = videoRef.current;
     if (!video) return;
 
+    let cleanup: (() => void) | undefined;
+    let cancelled = false;
+
     const start = () => {
-      attachVideoSources(video, getHeroVideoSources());
+      if (cancelled) return;
+      attachVideoSource(video, getHeroVideoSources());
       video.preload = "auto";
       video.load();
       const onPlaying = () => setVisible(true);
       video.addEventListener("playing", onPlaying);
       if (autoPlay) video.play().catch(() => {});
-      return () => video.removeEventListener("playing", onPlaying);
+      cleanup = () => video.removeEventListener("playing", onPlaying);
     };
 
-    let cleanup: (() => void) | undefined;
-    scheduleIdleWork(() => {
-      cleanup = start();
+    waitForLcp().then(() => {
+      scheduleIdleWork(start, 800);
     });
 
-    return () => cleanup?.();
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
   }, [autoPlay]);
 
   return (

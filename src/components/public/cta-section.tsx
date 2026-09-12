@@ -12,9 +12,10 @@ export function CtaSection() {
     <section className="relative py-20 sm:py-32 overflow-hidden w-full max-w-full">
       <div className="absolute inset-0">
         <Image
-          src={stockImage("mountainPeaks", 1920)}
+          src={stockImage("mountainPeaks", 1200)}
           alt="Kaçkar Dağları panorama"
           fill
+          loading="lazy"
           className="object-cover"
           sizes="100vw"
         />

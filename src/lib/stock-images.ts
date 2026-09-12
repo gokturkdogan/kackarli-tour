@@ -1,6 +1,6 @@
 /**
  * Verified Unsplash stock images (HTTP 200).
- * Use stockImage() so width/quality stay consistent across the site.
+ * Prefer stockImage() so width/quality stay consistent across the site.
  */
 const STOCK_PHOTOS = {
   heroMountain: "photo-1506905925346-21bda4d32df4",
@@ -12,32 +12,23 @@ const STOCK_PHOTOS = {
   localFood: "photo-1504674900247-0877df9cc836",
   starryMountains: "photo-1519681393784-d120267933ba",
   naturePanorama: "photo-1469474968028-56623f02e42e",
+  waterfall: "photo-1432405972618-c60b0225b8f9",
+  plateauHouses: "photo-1552733407-5d5c46c3bb3b",
+  coastalCity: "photo-1555993539-1732b0258235",
+  greenHills: "photo-1500530855697-b586d89ba3ee",
+  scenicView: "photo-1472214103451-9374bd1c798e",
 } as const;
 
-/** Muhlama / yerel kültür — Cloudinary */
-export const LOCAL_CULTURE_IMAGE =
-  "https://res.cloudinary.com/housrfzh/image/upload/v1784814501/image_tdpnpo.png";
-
-/** Şelale & vadi — Cloudinary */
-export const WATERFALL_VALLEY_IMAGE =
-  "https://res.cloudinary.com/housrfzh/image/upload/v1784815269/image_srqqa5.png";
-
-/** Kaçkar manzarası — Cloudinary */
-export const KACKAR_VIEW_IMAGE =
-  "https://res.cloudinary.com/housrfzh/image/upload/v1784815328/image_wqsiss.png";
-
-/** Yayla atmosferi — Cloudinary */
-export const YAYLA_ATMOSPHERE_IMAGE =
-  "https://res.cloudinary.com/housrfzh/image/upload/v1784815365/image_tc0rhu.png";
-
 export type StockPhotoKey = keyof typeof STOCK_PHOTOS;
+
+export const DEFAULT_STOCK_KEY: StockPhotoKey = "mistyValley";
 
 export function stockImage(
   key: StockPhotoKey,
   width = 800,
   quality = 80
 ): string {
-  return `https://images.unsplash.com/${STOCK_PHOTOS[key]}?w=${width}&q=${quality}`;
+  return `https://images.unsplash.com/${STOCK_PHOTOS[key]}?w=${width}&q=${quality}&auto=format&fit=crop`;
 }
 
 export const tourCardFallbacks = [
@@ -50,12 +41,27 @@ const LEGACY_BROKEN_PHOTOS: Record<string, StockPhotoKey> = {
   "photo-1454496526348-df8e440a6e24": "forestPath",
 };
 
-/** Maps removed Unsplash IDs to verified replacements (e.g. old DB rows). */
+/** @deprecated Use stockImage() with semantic keys instead. */
+export const LOCAL_CULTURE_IMAGE = stockImage("localFood", 1200);
+/** @deprecated Use stockImage() with semantic keys instead. */
+export const WATERFALL_VALLEY_IMAGE = stockImage("waterfall", 1200);
+/** @deprecated Use stockImage() with semantic keys instead. */
+export const KACKAR_VIEW_IMAGE = stockImage("mountainPeaks", 1200);
+/** @deprecated Use stockImage() with semantic keys instead. */
+export const YAYLA_ATMOSPHERE_IMAGE = stockImage("plateauHouses", 1200);
+
+/**
+ * Normalizes external image URLs and maps known broken IDs to verified replacements.
+ * Always returns a working URL — never undefined.
+ */
 export function resolveStockImageUrl(
   url: string | null | undefined,
-  width = 800
-): string | undefined {
-  if (!url) return undefined;
+  width = 800,
+  fallback: StockPhotoKey = DEFAULT_STOCK_KEY
+): string {
+  if (!url) {
+    return stockImage(fallback, width);
+  }
 
   for (const [brokenId, replacementKey] of Object.entries(LEGACY_BROKEN_PHOTOS)) {
     if (url.includes(brokenId)) {
@@ -63,5 +69,20 @@ export function resolveStockImageUrl(
     }
   }
 
-  return url;
+  if (url.includes("images.unsplash.com")) {
+    if (url.includes("w=")) {
+      return url.replace(/w=\d+/, `w=${width}`);
+    }
+    return `${url}${url.includes("?") ? "&" : "?"}w=${width}&q=80&auto=format&fit=crop`;
+  }
+
+  if (url.startsWith("/")) {
+    return url;
+  }
+
+  if (url.startsWith("http")) {
+    return url;
+  }
+
+  return stockImage(fallback, width);
 }

@@ -49,8 +49,8 @@ export async function PublicFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/galeri" className="hover:text-cream transition-colors">
-                  Galeri
+                <Link href="/rehberlerimiz" className="hover:text-cream transition-colors">
+                  Rehberlerimiz
                 </Link>
               </li>
               <li>

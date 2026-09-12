@@ -37,17 +37,14 @@ export function RoutePreviewCard({ tour, className, compact = false }: RoutePrev
             compact ? "h-44 sm:h-48" : "h-52 sm:h-56 lg:h-auto lg:min-h-[300px]"
           )}
         >
-          {tour.image ? (
-            <Image
-              src={tour.image}
-              alt={tour.title}
-              fill
-              className="object-cover object-[center_5%] transition-transform duration-700 group-hover:scale-105"
-              sizes={compact ? "(max-width: 768px) 90vw, 400px" : "(max-width: 1024px) 100vw, 50vw"}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-forest-100" />
-          )}
+          <Image
+            src={tour.image ?? ""}
+            alt={tour.title}
+            fill
+            loading="lazy"
+            className="object-cover object-[center_5%] transition-transform duration-700 group-hover:scale-105"
+            sizes={compact ? "(max-width: 768px) 90vw, 400px" : "(max-width: 1024px) 100vw, 50vw"}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-900/70 via-forest-900/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-forest-900/15" />
           <div className="absolute bottom-3 left-3 right-3 lg:hidden">
             <p className="text-cream font-bold text-base leading-snug drop-shadow-sm line-clamp-2">

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { HeroVideoSources } from "@/lib/hero-video";
-import { scheduleIdleWork } from "@/lib/hero-video";
+import { scheduleIdleWork, waitForLcp } from "@/lib/hero-video";
 import { getLayoutViewportHeight } from "@/lib/viewport-height";
 
 const CAMERA_FOV = 50;
@@ -35,17 +35,12 @@ function isWebGLAvailable() {
   }
 }
 
-function attachVideoSources(video: HTMLVideoElement, sources: HeroVideoSources) {
+function attachVideoSource(video: HTMLVideoElement, sources: HeroVideoSources) {
   video.replaceChildren();
-  // Prefer MP4 — our H.264 encodes are higher quality than the WebM variants.
   const mp4 = document.createElement("source");
   mp4.src = sources.mp4;
   mp4.type = "video/mp4";
-  const webm = document.createElement("source");
-  webm.src = sources.webm;
-  webm.type = "video/webm";
   video.appendChild(mp4);
-  video.appendChild(webm);
 }
 
 const vertexShader = /* glsl */ `
@@ -181,7 +176,7 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
       const renderer = new THREE.WebGLRenderer({
         canvas: canvasRef.current!,
         alpha: true,
-        antialias: true,
+        antialias: !isMobile(),
         powerPreference: "high-performance",
       });
       renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -232,14 +227,14 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
       scene.add(mesh);
 
       const progressRef = { current: 0 };
+      const lastRenderedProgress = { current: -1 };
       const videoAspectRef = { current: 16 / 9 };
       const worldPerPxRef = { current: 0.01 };
       const canvasSizeRef = { current: { w: 1, h: 1 } };
       const targetRectRef = {
         current: null as null | { left: number; top: number; width: number; height: number },
       };
-      const dpr = () =>
-        Math.min(window.devicePixelRatio || 1, isMobile() ? 2 : 1.5);
+      const dpr = () => Math.min(window.devicePixelRatio || 1, isMobile() ? 1 : 1.5);
 
       const measureTarget = () => {
         const el = targetRef.current;
@@ -278,11 +273,28 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
       });
 
       let rafId = 0;
+      let renderActive = true;
       const render = () => {
+        if (!renderActive) return;
         rafId = requestAnimationFrame(render);
         if (document.hidden) return;
 
         const p = progressRef.current;
+        if (p >= 0.999) {
+          renderActive = false;
+          cancelAnimationFrame(rafId);
+          return;
+        }
+
+        const needsContinuousVideo = p < 0.05 && !video.paused;
+        if (
+          !needsContinuousVideo &&
+          Math.abs(p - lastRenderedProgress.current) < 0.0005
+        ) {
+          return;
+        }
+        lastRenderedProgress.current = p;
+
         const motion = clamp01((p - 0.04) / 0.88);
         const e = motion;
 
@@ -352,6 +364,11 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
           onRefresh: () => resize(),
           onUpdate: (self) => {
             progressRef.current = self.progress;
+            lastRenderedProgress.current = -1;
+            if (self.progress < 0.999 && !renderActive) {
+              renderActive = true;
+              render();
+            }
           },
         },
       });
@@ -385,8 +402,16 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
         window.setTimeout(refreshScrollTrigger, 120);
       };
       const onVisibility = () => {
-        if (document.hidden) video.pause();
-        else playVideo();
+        if (document.hidden) {
+          video.pause();
+          return;
+        }
+        playVideo();
+        if (progressRef.current < 0.999 && !renderActive) {
+          renderActive = true;
+          lastRenderedProgress.current = -1;
+          render();
+        }
       };
       window.addEventListener("resize", onResize);
       window.addEventListener("orientationchange", onOrientation);
@@ -394,13 +419,14 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
 
       scheduleIdleWork(() => {
         if (cancelled) return;
-        attachVideoSources(video, sources);
+        attachVideoSource(video, sources);
         video.preload = "auto";
         video.load();
         playVideo();
-      });
+      }, 800);
 
       disposeScene = () => {
+        renderActive = false;
         cancelAnimationFrame(rafId);
         window.clearTimeout(resizeTimer);
         window.removeEventListener("resize", onResize);
@@ -425,13 +451,17 @@ export function useHeroVideoTransition({ sources, enabled }: Options): HeroVideo
       };
     };
 
-    init();
+    waitForLcp().then(() => {
+      scheduleIdleWork(() => {
+        if (!cancelled) init();
+      }, 600);
+    });
 
     return () => {
       cancelled = true;
       disposeScene?.();
     };
-  }, [enabled, sources.mp4, sources.webm]);
+  }, [enabled, sources.mp4]);
 
   return {
     sectionRef,

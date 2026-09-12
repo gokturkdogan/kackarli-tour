@@ -1,39 +1,26 @@
-import { getActiveDayTripTourCount, getActivePublicTours } from "@/actions/public";
+import { Suspense } from "react";
+import { buildPageMetadata } from "@/lib/seo";
 import { PublicFooter } from "@/components/public/public-footer";
 import { HeroBannerSection } from "@/components/public/hero-banner-section";
-import { DestinationMarquee } from "@/components/public/destination-marquee";
-import { StatsBar } from "@/components/public/stats-bar";
-import { RizeHighlights } from "@/components/public/rize-highlights";
-import { ExperienceBanner } from "@/components/public/experience-banner";
-import { RoutePreviews } from "@/components/public/route-previews";
-import { RouteItinerarySection } from "@/components/public/route-itinerary-section";
-import { WhyChooseUs } from "@/components/public/why-choose-us";
-import { CtaSection } from "@/components/public/cta-section";
+import { HomeTourSections } from "@/components/public/home-tour-sections";
 
-export const dynamic = "force-dynamic";
+export const metadata = buildPageMetadata({
+  title: "Rize Günübirlik Yayla Turu",
+  description:
+    "Kaçkarlı Tur ile Rize ve Kaçkar Dağları'nda günübirlik yayla turu. Fırtına Vadisi, Ayder, Pokut ve Sal rotalarında rehberli turlar.",
+  path: "/",
+});
 
-export default async function HomePage() {
-  const [activeTours, dayTripRouteCount] = await Promise.all([
-    getActivePublicTours(),
-    getActiveDayTripTourCount(),
-  ]);
+export const revalidate = 300;
 
-  const primaryTour = activeTours[0] ?? null;
-
+export default function HomePage() {
   return (
     <>
       <main className="overflow-x-hidden w-full max-w-full">
         <HeroBannerSection />
-        <DestinationMarquee />
-        <StatsBar dayTripRouteCount={dayTripRouteCount} />
-        <RizeHighlights />
-        <ExperienceBanner />
-        {activeTours.length > 0 && <RoutePreviews tours={activeTours} />}
-        {activeTours.length === 1 && primaryTour && (
-          <RouteItinerarySection tour={primaryTour} />
-        )}
-        <WhyChooseUs />
-        <CtaSection />
+        <Suspense fallback={null}>
+          <HomeTourSections />
+        </Suspense>
       </main>
       <PublicFooter />
     </>

@@ -8,7 +8,22 @@ interface AnimateInProps {
   className?: string;
   delay?: number;
   direction?: "up" | "left" | "right" | "none";
+  /** Skip IntersectionObserver — show immediately (hero / above-the-fold). */
+  immediate?: boolean;
   id?: string;
+}
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+function isInViewport(el: HTMLElement) {
+  const rect = el.getBoundingClientRect();
+  const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+  return rect.top < viewHeight && rect.bottom > 0;
 }
 
 export function AnimateIn({
@@ -16,14 +31,25 @@ export function AnimateIn({
   className,
   delay = 0,
   direction = "up",
+  immediate = false,
   id,
 }: AnimateInProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(immediate);
 
   useEffect(() => {
+    if (immediate || prefersReducedMotion()) {
+      setVisible(true);
+      return;
+    }
+
     const el = ref.current;
     if (!el) return;
+
+    if (isInViewport(el)) {
+      requestAnimationFrame(() => setVisible(true));
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -32,12 +58,12 @@ export function AnimateIn({
           observer.unobserve(el);
         }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -20px 0px" }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [immediate]);
 
   return (
     <div

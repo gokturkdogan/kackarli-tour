@@ -51,7 +51,7 @@ function findInitialTour(
   return bookableTours[0];
 }
 
-interface ReservationFormProps {
+export interface ReservationFormProps {
   tours: PublicTourReservationOption[];
   initialTourSlug?: string;
   initialScheduleId?: string;

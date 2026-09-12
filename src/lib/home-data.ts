@@ -1,9 +1,4 @@
-import {
-  KACKAR_VIEW_IMAGE,
-  LOCAL_CULTURE_IMAGE,
-  WATERFALL_VALLEY_IMAGE,
-  YAYLA_ATMOSPHERE_IMAGE,
-} from "@/lib/stock-images";
+import { stockImage } from "@/lib/stock-images";
 
 export const rizeHighlights = [
   {
@@ -11,28 +6,28 @@ export const rizeHighlights = [
     title: "Kaçkar Manzarası",
     description:
       "Rotamız boyunca Kaçkar silüetini farklı açılardan izleme fırsatı. Sisli yaylalarda dağların görkemli silueti.",
-    image: KACKAR_VIEW_IMAGE,
+    image: stockImage("mountainPeaks", 600),
   },
   {
     icon: "cloud",
     title: "Yayla Atmosferi",
     description:
       "Ayder, Pokut ve Sal — Karadeniz'in en ikonik yaylalarını tek günde deneyimleyin.",
-    image: YAYLA_ATMOSPHERE_IMAGE,
+    image: stockImage("plateauHouses", 600),
   },
   {
     icon: "droplets",
     title: "Şelale & Vadi",
     description:
       "Fırtına Vadisi ve Gelintulu çevresinde coşkulu dereler, şelaleler ve yeşil vadiler.",
-    image: WATERFALL_VALLEY_IMAGE,
+    image: stockImage("waterfall", 600),
   },
   {
     icon: "leaf",
     title: "Yerel Kültür",
     description:
       "Yayla restoranlarında Karadeniz lezzetleri, çay molaları ve sıcakkanlı yerel misafirperverlik.",
-    image: LOCAL_CULTURE_IMAGE,
+    image: stockImage("localFood", 600),
   },
 ];
 

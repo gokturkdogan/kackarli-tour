@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -12,13 +11,16 @@ import { AnimateIn } from "@/components/public/animate-in";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { tourTypeLabel } from "@/lib/utils-helpers";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "Turlar",
-  description: "Kaçkarlı Tur günübirlik ve konaklamalı yayla turları.",
-};
+  description:
+    "Kaçkarlı Tur günübirlik ve konaklamalı yayla turları. Rize, Ayder, Pokut ve Kaçkar Dağları rotalarını keşfedin.",
+  path: "/turlar",
+});
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function ToursPage() {
   const tours = await getActivePublicTours();
@@ -63,17 +65,13 @@ export default async function ToursPage() {
                       className="group block rounded-2xl overflow-hidden bg-white border border-forest-100 hover:border-forest-300 hover:shadow-xl transition-all"
                     >
                       <div className="relative h-52 overflow-hidden">
-                        {tour.image ? (
-                          <Image
-                            src={tour.image}
-                            alt={tour.title}
-                            fill
-                            className="object-cover object-[center_10%] group-hover:scale-105 transition-transform duration-500"
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                          />
-                        ) : (
-                          <div className="absolute inset-0 bg-forest-100" />
-                        )}
+                        <Image
+                          src={tour.image ?? ""}
+                          alt={tour.title}
+                          fill
+                          className="object-cover object-[center_10%] group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                        />
                         <div className="absolute inset-0 bg-gradient-to-t from-forest-900/70 to-transparent" />
                         <div className="absolute top-3 left-3">
                           <Badge

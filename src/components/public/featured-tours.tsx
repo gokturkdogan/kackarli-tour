@@ -1,5 +1,6 @@
 import { PageContainer } from "@/components/public/page-container";
 import Image from "next/image";
+import { resolveStockImageUrl, tourCardFallbacks } from "@/lib/stock-images";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import { formatPrice, tourTypeLabel } from "@/lib/utils-helpers";
@@ -25,7 +26,6 @@ interface FeaturedToursProps {
   tours: Tour[];
 }
 
-import { resolveStockImageUrl, tourCardFallbacks } from "@/lib/stock-images";
 
 export function FeaturedTours({ tours }: FeaturedToursProps) {
   if (tours.length === 0) return null;

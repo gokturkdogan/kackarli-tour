@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-/** Transparent PNG — `public/images/kackarli-tour-logo.png` */
+/** Optimized logo — display ~44–48px tall; source resized for fast decode. */
 export const SITE_LOGO_SRC = "/images/kackarli-tour-logo.png";
 
-const LOGO_WIDTH = 2172;
-const LOGO_HEIGHT = 724;
+const LOGO_WIDTH = 400;
+const LOGO_HEIGHT = 133;
 
 interface SiteLogoProps {
   className?: string;

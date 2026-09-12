@@ -1,3 +1,5 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import {
   defaultSiteSettings,
@@ -7,7 +9,7 @@ import {
 
 export * from "@/lib/site-settings.shared";
 
-export async function getSiteSettings(): Promise<SiteSettings> {
+async function loadSiteSettings(): Promise<SiteSettings> {
   const records = await prisma.siteSetting.findMany();
   if (records.length === 0) {
     return defaultSiteSettings;
@@ -15,3 +17,9 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 
   return mapSiteSettingsFromRecords(records);
 }
+
+const getCachedSiteSettings = unstable_cache(loadSiteSettings, ["site-settings"], {
+  revalidate: 600,
+});
+
+export const getSiteSettings = cache(() => getCachedSiteSettings());

@@ -43,6 +43,7 @@ export function RizeHighlights() {
                       src={item.image}
                       alt={item.title}
                       fill
+                      loading="lazy"
                       className="object-cover object-[center_10%] transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />

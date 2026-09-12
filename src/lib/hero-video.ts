@@ -5,15 +5,10 @@ export const HERO_VIDEO = {
     desktop: "/videos/rize-hero.mp4",
     mobile: "/videos/rize-hero-mobile.mp4",
   },
-  webm: {
-    desktop: "/videos/rize-hero.webm",
-    mobile: "/videos/rize-hero-mobile.webm",
-  },
 } as const;
 
 export interface HeroVideoSources {
   mp4: string;
-  webm: string;
 }
 
 export function isMobileViewport() {
@@ -39,7 +34,6 @@ export function getHeroVideoSources(): HeroVideoSources {
   const mobile = isMobileViewport();
   return {
     mp4: mobile ? HERO_VIDEO.mp4.mobile : HERO_VIDEO.mp4.desktop,
-    webm: mobile ? HERO_VIDEO.webm.mobile : HERO_VIDEO.webm.desktop,
   };
 }
 
@@ -51,4 +45,31 @@ export function scheduleIdleWork(callback: () => void, timeoutMs = 1800) {
   } else {
     setTimeout(callback, 120);
   }
+}
+
+/** Wait for LCP (or timeout) before loading heavy hero assets. */
+export function waitForLcp(timeoutMs = 1200): Promise<void> {
+  if (typeof window === "undefined") return Promise.resolve();
+
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+
+    const timer = window.setTimeout(finish, timeoutMs);
+
+    try {
+      const po = new PerformanceObserver(() => {
+        window.clearTimeout(timer);
+        po.disconnect();
+        finish();
+      });
+      po.observe({ type: "largest-contentful-paint", buffered: true });
+    } catch {
+      scheduleIdleWork(finish, timeoutMs);
+    }
+  });
 }

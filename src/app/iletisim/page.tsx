@@ -1,18 +1,19 @@
-import type { Metadata } from "next";
 import { stockImage } from "@/lib/stock-images";
+import { buildPageMetadata } from "@/lib/seo";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PageHero } from "@/components/public/page-hero";
 import { ContactHub } from "@/components/public/contact-hub";
 import { getSiteSettings } from "@/lib/site-settings";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "İletişim",
   description:
     "Kaçkarlı Tur ile iletişime geçin. Rize yayla turları hakkında bilgi alın, rezervasyon yapın.",
-};
+  path: "/iletisim",
+});
 
-export const dynamic = "force-dynamic";
+export const revalidate = 600;
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();

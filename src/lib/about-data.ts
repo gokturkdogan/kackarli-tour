@@ -1,4 +1,4 @@
-import { LOCAL_CULTURE_IMAGE, stockImage } from "@/lib/stock-images";
+import { stockImage } from "@/lib/stock-images";
 
 export const milestones = [
   {
@@ -97,7 +97,7 @@ export const bentoFeatures = [
     stat: null,
     statLabel: null,
     size: "lg",
-    image: LOCAL_CULTURE_IMAGE,
+    image: stockImage("localFood", 1200),
   },
   {
     title: "Profesyonel Rehberlik",

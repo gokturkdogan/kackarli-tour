@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { stockImage } from "@/lib/stock-images";
+import { buildPageMetadata } from "@/lib/seo";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { PageHero } from "@/components/public/page-hero";
@@ -11,13 +11,14 @@ import { TimelineSection } from "@/components/public/about/timeline-section";
 import { MissionVision } from "@/components/public/about/mission-vision";
 import { getSiteSettings } from "@/lib/site-settings";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: "Hakkımızda",
   description:
     "Kaçkarlı Tur hakkında bilgi edinin. Rize yayla turizminde 10 yılı aşkın deneyim, tutkulu rehberler ve unutulmaz rotalar.",
-};
+  path: "/hakkimizda",
+});
 
-export const dynamic = "force-dynamic";
+export const revalidate = 600;
 
 export default async function AboutPage() {
   const settings = await getSiteSettings();

@@ -33,6 +33,11 @@ enum ReservationStatus {
   COMPLETED
 }
 
+enum GuideStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model User {
   id                String             @id @default(cuid())
   name              String?
@@ -193,4 +198,32 @@ model ContactMessage {
   message   String   @db.Text
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+model GuidePost {
+  id             String         @id @default(cuid())
+  title          String
+  slug           String         @unique
+  excerpt        String?        @db.Text
+  coverImageUrl  String?
+  publicId       String?
+  focusKeyword   String?
+  seoTitle       String?
+  seoDescription String?        @db.Text
+  status         GuideStatus    @default(DRAFT)
+  publishedAt    DateTime?
+  sortOrder      Int            @default(0)
+  readingMinutes Int?
+  sections       GuideSection[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model GuideSection {
+  id        String    @id @default(cuid())
+  guideId   String
+  guide     GuidePost @relation(fields: [guideId], references: [id], onDelete: Cascade)
+  heading   String
+  content   String    @db.Text
+  sortOrder Int       @default(0)
 }
